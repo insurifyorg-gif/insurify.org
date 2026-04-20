@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pay Deductible | Insurify Claims</title>
+    <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
+    <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
+    <meta property="og:title" content="Insurify Claims Management" />
+    <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
+    <meta property="og:type" content="website" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="api-client.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <header class="bg-blue-900 text-white">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Insurify Deductible Payment</h1>
+      <a href="claims.html" class="bg-white text-blue-900 px-4 py-2 rounded font-semibold">Back to Claims</a>
+    </div>
+  </header>
+  <main class="max-w-xl mx-auto px-6 py-12 fade-in">
+    <div id="payment-content" class="bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">Deductible Payment</h2>
+      <div id="loading" class="text-gray-500">Loading payment details...</div>
+      <div id="payment-details" style="display:none;">
+        <div class="mb-4">
+          <span class="font-semibold">Tracking ID:</span>
+          <span id="tracking-id" class="text-blue-700 font-mono"></span>
+        </div>
+        <div class="mb-4">
+          <span class="font-semibold">Claim Number:</span>
+          <span id="claim-number"></span>
+        </div>
+        <div class="mb-4">
+          <span class="font-semibold">Deductible Amount:</span>
+          <span id="deductible-amount" class="text-red-700 font-bold"></span>
+        </div>
+        <div class="mb-4">
+          <span class="font-semibold">Reason:</span>
+          <span id="deductible-reason"></span>
+        </div>
+        <div class="mb-4">
+          <span class="font-semibold">Payment Account Detail:</span>
+          <span id="payment-account-detail" class="text-blue-900"></span>
+        </div>
+        <div class="mb-8">
+          <span class="font-semibold">Due Date:</span>
+          <span id="due-date"></span>
+        </div>
+        <button id="mark-paid-btn" class="bg-green-700 text-white px-6 py-3 rounded-lg font-bold text-lg shadow-lg hover:bg-green-800 transition">Mark as Paid</button>
+        <div id="paid-message" class="mt-4 text-blue-900 font-semibold" style="display:none;">
+          <div id="pending-message" class="text-sm text-gray-600 mb-2">⏳ Waiting for admin to confirm receipt of your payment...</div>
+          <span id="review-timer" class="block mt-2 text-sm text-gray-600"></span>
+        </div>
+        <div id="rejection-message" class="mt-4 text-red-600 font-semibold" style="display:none;"></div>
+      </div>
+      <div id="error-message" class="text-red-600 mt-4" style="display:none;"></div>
+    </div>
+  </main>
+  <script>
+    function generateTrackingId() {
+      return 'PAY-' + Date.now() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const claimNumber = urlParams.get('claim');
+    let transactionId = null; // Store single ID for both tracking and payment
+    
+    // Function to fetch and update deductible status
+    function updateDeductibleStatus() {
+      if (!claimNumber) return;
+      fetch(`/api/claims/${claimNumber}/deductible-status`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('payment-details').style.display = '';
+          document.getElementById('claim-number').textContent = claimNumber;
+          document.getElementById('deductible-amount').textContent = (data.deductible_amount !== undefined && data.deductible_amount !== null)
+            ? ('$' + Number(data.deductible_amount).toFixed(2)) : '--';
+          document.getElementById('deductible-reason').textContent = data.deductible_reason || '--';
+          document.getElementById('due-date').textContent = data.due_date ? data.due_date : '--';
+          document.getElementById('payment-account-detail').textContent = data.payment_account_detail || 'Not provided.';
+          
+          // Check payment status and update UI
+          if (data.payment_status === 'approved') {
+            document.getElementById('mark-paid-btn').style.display = 'none';
+            document.getElementById('paid-message').style.display = '';
+            document.getElementById('review-timer').textContent = '✓ Admin confirmed your payment. Thank you!';
+          } else if (data.payment_status === 'rejected') {
+            document.getElementById('mark-paid-btn').style.display = '';
+            document.getElementById('mark-paid-btn').textContent = 'Resubmit Payment';
+            document.getElementById('paid-message').style.display = '';
+            document.getElementById('rejection-message').style.display = '';
+            document.getElementById('rejection-message').innerHTML = '⚠️ Admin did not receive your payment. Please try again.';
+          } else if (data.payment_status === 'pending_review') {
+            document.getElementById('mark-paid-btn').style.display = 'none';
+            document.getElementById('paid-message').style.display = '';
+            document.getElementById('pending-message').style.display = '';
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching deductible status:', err);
+        });
+    }
+    
+    if (!claimNumber) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error-message').textContent = 'No claim number provided.';
+      document.getElementById('error-message').style.display = '';
+    } else {
+      // Generate single transaction ID for tracking and payment
+      transactionId = generateTrackingId();
+      document.getElementById('tracking-id').textContent = transactionId;
+      
+      // Initial fetch
+      updateDeductibleStatus();
+      
+      // Poll for updates every 2 seconds (faster for payment status)
+      setInterval(updateDeductibleStatus, 2000);
+      
+      document.getElementById('mark-paid-btn').onclick = function() {
+        // Clear previous responses
+        document.getElementById('rejection-message').innerHTML = '';
+        document.getElementById('rejection-message').style.display = 'none';
+        document.getElementById('paid-message').style.display = '';
+        
+        // Show same transaction ID (tracking ID = payment ID)
+        document.getElementById('pending-message').innerHTML = `<span class="font-mono bg-blue-100 px-2 py-1 rounded">Payment ID: ${transactionId}</span><br>⏳ Waiting for admin to confirm receipt of your payment...`;
+        
+        fetch(`/api/claims/${claimNumber}/deductible-paid`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('paid-message').style.display = '';
+          document.getElementById('mark-paid-btn').disabled = true;
+          document.getElementById('mark-paid-btn').style.display = 'none';
+          // Start 20-minute timer
+          let remaining = 20 * 60; // seconds
+          const timerEl = document.getElementById('review-timer');
+          function updateTimer() {
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            timerEl.textContent = `Admin has ${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')} to confirm or reject your payment.`;
+            if (remaining > 0) {
+              remaining--;
+              setTimeout(updateTimer, 1000);
+            } else {
+              timerEl.textContent = 'If your payment is not confirmed, please contact support.';
+            }
+          }
+          updateTimer();
+        })
+        .catch(err => {
+          document.getElementById('error-message').textContent = 'Error marking as paid.';
+          document.getElementById('error-message').style.display = '';
+        });
+      };
+    }
+  </script>
+</body>
+</html>

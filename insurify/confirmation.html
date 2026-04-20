@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Claim Submitted | Insurify Claims</title>
+    <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
+    <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
+    <meta property="og:title" content="Insurify Claims Management" />
+    <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
+    <meta property="og:type" content="website" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="api-client.js"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="bg-blue-900 text-white relative">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="about.html" class="hover:text-blue-300">About</a>
+      <a href="services.html" class="hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+    </nav>
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+    <a href="about.html" class="block hover:text-blue-300">About</a>
+    <a href="services.html" class="block hover:text-blue-300">Services</a>
+    <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+  </div>
+</header>
+
+<main class="min-h-screen flex items-center justify-center px-6">
+  <div class="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full text-center">
+
+    <h2 class="text-3xl font-extrabold text-green-600 mb-4">
+      Claim Submitted Successfully
+    </h2>
+
+    <p class="text-gray-700 mb-6">
+      Thank you for submitting your claim. Your information has been securely received.
+    </p>
+
+    <div class="bg-gray-100 p-4 rounded-lg mb-6">
+      <p class="text-sm text-gray-500">Your Claim ID</p>
+      <p id="claim-id" class="text-xl font-bold text-blue-900">Loading...</p>
+      <button onclick="downloadClaimId()" class="mt-4 bg-blue-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-800 transition">Download Claim ID</button>
+    </div>
+
+    <p class="text-gray-600 mb-6">
+      Use this Claim ID along with your email address to track your claim status.
+    </p>
+
+    <div class="flex flex-col gap-4">
+      <a href="claims.html"
+         class="bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+        Track My Claim
+      </a>
+
+      <a href="index.html"
+         class="text-blue-700 font-semibold hover:underline">
+        Return to Home
+      </a>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-8">
+      Insurify Claims provides claim assistance only and does not guarantee
+      approval, timing, or payment of claims.
+    </p>
+
+  </div>
+</main>
+
+<script>
+  function downloadClaimId() {
+    const claimId = document.getElementById('claim-id').textContent;
+    const blob = new Blob([`Your Claim ID: ${claimId}\nKeep this ID to track your claim.`], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'claim-id.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Get claim number from URL
+  window.addEventListener('load', () => {
+    const params = new URLSearchParams(window.location.search);
+    const claimNumber = params.get('claim_number');
+    
+    if (claimNumber) {
+      document.getElementById('claim-id').textContent = claimNumber;
+    }
+  });
+</script>

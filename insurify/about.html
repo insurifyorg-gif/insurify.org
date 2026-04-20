@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About Us | Insurify Claims</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn about Insurify Claims, our mission, values, and commitment to simplifying the insurance claims process with transparency and trust." />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .fade-in { animation: fadeIn 1.2s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card-hover:hover {
+      box-shadow: 0 15px 40px rgba(37,99,235,0.15);
+      transform: translateY(-4px);
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="bg-blue-900 text-white relative">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="about.html" class="hover:text-blue-300">About</a>
+      <a href="services.html" class="hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+    </nav>
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+    <a href="about.html" class="block hover:text-blue-300">About</a>
+    <a href="services.html" class="block hover:text-blue-300">Services</a>
+    <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="py-20 fade-in">
+
+  <!-- INTRO -->
+  <section class="max-w-4xl mx-auto px-6 text-center mb-16">
+    <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text text-transparent mb-6">
+      About Insurify Claims
+    </h1>
+    <p class="text-lg text-gray-600 leading-relaxed">
+      Insurify Claims exists to remove confusion, delays, and stress from the insurance claims process.
+      We combine modern technology with expert guidance to help individuals and businesses resolve claims
+      faster, smarter, and with confidence.
+    </p>
+  </section>
+
+  <!-- MISSION & VISION -->
+  <section class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 mb-20">
+    <div class="bg-white p-10 rounded-2xl shadow-xl card-hover">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">Our Mission</h2>
+      <p class="text-gray-600 leading-relaxed">
+        To simplify and demystify the insurance claims process by providing transparency,
+        real-time tracking, and expert-backed support at every stage.
+      </p>
+    </div>
+
+    <div class="bg-white p-10 rounded-2xl shadow-xl card-hover">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">Our Vision</h2>
+      <p class="text-gray-600 leading-relaxed">
+        To become the most trusted digital claims assistance platform—where policyholders
+        feel informed, protected, and empowered.
+      </p>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="max-w-6xl mx-auto px-6 mb-20">
+    <h2 class="text-3xl font-bold text-center text-blue-900 mb-10">Our Core Values</h2>
+    <div class="grid md:grid-cols-4 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow card-hover text-center">
+        <h3 class="font-semibold mb-2">Transparency</h3>
+        <p class="text-sm text-gray-600">Clear communication and honest guidance.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow card-hover text-center">
+        <h3 class="font-semibold mb-2">Security</h3>
+        <p class="text-sm text-gray-600">Your data is encrypted and protected.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow card-hover text-center">
+        <h3 class="font-semibold mb-2">Efficiency</h3>
+        <p class="text-sm text-gray-600">Faster claims through smart automation.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow card-hover text-center">
+        <h3 class="font-semibold mb-2">Support</h3>
+        <p class="text-sm text-gray-600">Real help when it matters most.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="bg-blue-50 py-16 mb-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-blue-900 mb-12">How It Works</h2>
+      <div class="grid md:grid-cols-4 gap-8 text-center">
+        <div>
+          <span class="text-4xl font-extrabold text-blue-700">1</span>
+          <p class="mt-3 font-medium">Submit Your Claim</p>
+        </div>
+        <div>
+          <span class="text-4xl font-extrabold text-blue-700">2</span>
+          <p class="mt-3 font-medium">Track Progress</p>
+        </div>
+        <div>
+          <span class="text-4xl font-extrabold text-blue-700">3</span>
+          <p class="mt-3 font-medium">Expert Review</p>
+        </div>
+        <div>
+          <span class="text-4xl font-extrabold text-blue-700">4</span>
+          <p class="mt-3 font-medium">Resolution & Support</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-blue-900 mb-6">Trust & Compliance</h2>
+    <p class="text-gray-600 leading-relaxed">
+      Insurify Claims follows industry best practices for data security, privacy protection,
+      and regulatory compliance. Your information is handled with the highest level of care
+      and confidentiality.
+    </p>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-400 py-8 text-center">
+  <p>© 2013–2026 Insurify Claims. All rights reserved.</p>
+  <a href="index.html" class="inline-block mt-4 bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+    Back to Home
+  </a>
+</footer>
+
+</body>
+</html>

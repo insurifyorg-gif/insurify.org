@@ -1,0 +1,234 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Claims | Insurify Claims</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Submit, track, and manage your insurance claims with Insurify Claims." />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="api-client.js"></script>
+
+  <style>
+    .fade-in { animation: fadeIn 1.2s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card-hover:hover {
+      box-shadow: 0 10px 32px rgba(37,99,235,0.15);
+      transform: translateY(-4px) scale(1.03);
+      transition: all 0.3s cubic-bezier(.4,2,.6,1);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="bg-blue-900 text-white relative">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="about.html" class="hover:text-blue-300">About</a>
+      <a href="services.html" class="hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+    </nav>
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+    <a href="about.html" class="block hover:text-blue-300">About</a>
+    <a href="services.html" class="block hover:text-blue-300">Services</a>
+    <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="py-16">
+  <div class="max-w-5xl mx-auto px-6 fade-in">
+
+
+    <!-- FILE OR TRACK CLAIM BUTTON TOP -->
+    <div class="mb-8 text-center">
+      <a href="report.html"
+         class="inline-block bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 transition">
+        File or Track a Claim
+      </a>
+    </div>
+
+    <!-- TITLE -->
+    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 text-center
+               bg-gradient-to-r from-blue-700 to-blue-400
+               bg-clip-text text-transparent">
+      Claims Management
+    </h2>
+
+    <p class="text-gray-700 text-lg mb-12 text-center">
+      Submit a new insurance claim or track an existing claim in real time.
+      We make the claims process clear, secure, and stress-free.
+    </p>
+
+    <!-- GRID -->
+    <div class="grid md:grid-cols-2 gap-10">
+
+      <!-- HOW IT WORKS -->
+      <section class="bg-white rounded-2xl shadow-xl p-8 card-hover">
+        <h3 class="text-2xl font-semibold mb-4 text-blue-900">
+          How Claims Work
+        </h3>
+
+        <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+          <li>Submit your claim through our secure form</li>
+          <li>Receive a unique claim ID for tracking</li>
+          <li>Monitor status updates in real time</li>
+          <li>Get notified as your claim progresses</li>
+        </ol>
+
+        <div class="mt-8">
+          <a href="report.html"
+             class="inline-block bg-blue-900 text-white px-6 py-3 rounded-lg
+                    font-semibold hover:bg-blue-800 transition">
+            File a New Claim
+          </a>
+        </div>
+      </section>
+
+      <!-- TRACK EXISTING CLAIM -->
+      <section class="bg-white rounded-2xl shadow-xl p-8 card-hover">
+        <h3 class="text-2xl font-semibold mb-4 text-blue-900">
+          Track an Existing Claim
+        </h3>
+
+        <p class="text-gray-600 mb-6">
+          Already submitted a claim? Enter your claim number and email
+          to view your claim status.
+        </p>
+
+        <form id="trackClaimForm" class="space-y-4">
+          <input id="track-claim-number"
+                 type="text"
+                 placeholder="Claim Number (e.g., CLM-1234567890-ABC)"
+                 class="w-full p-3 border rounded-lg"
+                 required />
+
+          <input id="track-email"
+                 type="email"
+                 placeholder="Email Address"
+                 class="w-full p-3 border rounded-lg"
+                 required />
+
+          <button type="submit"
+                  class="w-full bg-blue-700 text-white py-3 rounded-lg
+                         font-semibold hover:bg-blue-600 transition">
+            Track Claim
+          </button>
+        </form>
+
+        <!-- Claim Details Display -->
+        <div id="claim-details" style="display:none;" class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 class="font-semibold text-blue-900 mb-2">Claim Details</h4>
+          <div id="claim-info" class="text-sm text-gray-700 space-y-2"></div>
+        </div>
+
+        <p class="text-sm text-gray-500 mt-6">
+          🔒 Your claim information is protected with secure encryption.
+        </p>
+      </section>
+
+    </div>
+
+    <!-- TRUST SIGNALS -->
+    <div class="mt-16 bg-blue-50 border border-blue-100 rounded-xl p-8 text-center">
+      <h4 class="text-xl font-semibold text-blue-900 mb-2">
+        Trusted Claims Support
+      </h4>
+      <p class="text-gray-600">
+        Insurify Claims does not determine claim outcomes.
+        All claims are processed according to your insurer’s policy terms.
+      </p>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-400 py-8 text-center mt-16">
+  <p>© 2013–2026 Insurify Claims. All rights reserved.</p>
+  <div class="mt-4">
+    <a href="index.html"
+       class="inline-block bg-blue-900 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-800 transition">
+      ← Back to Home
+    </a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('trackClaimForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const claimNumber = document.getElementById('track-claim-number').value;
+    const email = document.getElementById('track-email').value;
+
+    try {
+      const claim = await ClaimsService.getClaimByNumber(claimNumber);
+
+      if (claim.customer_email !== email) {
+        showAlert('Email does not match this claim', 'error');
+        return;
+      }
+
+      const statusColors = {
+        pending: 'bg-yellow-100 text-yellow-800',
+        approved: 'bg-green-100 text-green-800',
+        rejected: 'bg-red-100 text-red-800',
+        paid: 'bg-blue-100 text-blue-800'
+      };
+
+      document.getElementById('claim-info').innerHTML = `
+        <div><strong>Claim Number:</strong> ${claim.claim_number}</div>
+        <div><strong>Customer Name:</strong> ${claim.customer_name}</div>
+        <div><strong>Status:</strong> <span class="px-2 py-1 rounded ${statusColors[claim.status]}">${claim.status.toUpperCase()}</span></div>
+        <div><strong>Claim Type:</strong> ${claim.claim_type}</div>
+        <div><strong>Date Submitted:</strong> ${new Date(claim.created_at).toLocaleDateString()}</div>
+        <div><strong>Claimed Amount:</strong> $${claim.claimed_amount.toFixed(2)}</div>
+        <div><strong>Description:</strong> ${claim.description}</div>
+        ${claim.deductible_reason ? `<div class="mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+          <strong>Deductible Required:</strong> $${(claim.deductible_amount || 0).toFixed(2)}<br/>
+          <strong>Reason:</strong> ${claim.deductible_reason}<br/>
+          <a href="pay-deductible.html?claim=${claim.claim_number}" class="inline-block mt-3 bg-blue-700 text-white px-4 py-2 rounded font-semibold hover:bg-blue-800 transition">Pay Deductible</a>
+        </div>` : ''}
+        <div class="mt-4">
+          <button id="add-account-info-btn" class="bg-green-700 text-white px-4 py-2 rounded font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed" ${claim.status !== 'approved' ? 'disabled' : ''}>
+            Add Account Info
+          </button>
+          <span class="text-xs text-gray-500 ml-2">${claim.status !== 'approved' ? 'Available after approval' : ''}</span>
+        </div>
+      `;
+
+      document.getElementById('claim-details').style.display = 'block';
+    } catch (error) {
+      showAlert(error.message, 'error');
+    }
+  });
+</script>

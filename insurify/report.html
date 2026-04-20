@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Submit a Claim | Insurify Claims</title>
+    <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
+    <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
+    <meta property="og:title" content="Insurify Claims Management" />
+    <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
+    <meta property="og:type" content="website" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="api-client.js"></script>
+
+  <style>
+    .fade-in { animation: fadeIn 0.8s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="bg-blue-900 text-white relative">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="about.html" class="hover:text-blue-300">About</a>
+      <a href="services.html" class="hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+    </nav>
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+    <a href="about.html" class="block hover:text-blue-300">About</a>
+    <a href="services.html" class="block hover:text-blue-300">Services</a>
+    <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+  </div>
+</header>
+
+<main class="py-16">
+  <div class="max-w-3xl mx-auto px-6 bg-white p-10 rounded-2xl shadow-xl fade-in">
+
+    <h2 class="text-3xl font-extrabold mb-2 text-blue-900">
+      Submit a Claim
+    </h2>
+    <p class="text-gray-600 mb-8">
+      Complete the form below to securely submit your insurance claim.
+    </p>
+
+    <form id="claimForm" class="space-y-8">
+
+      <!-- STEP 1 -->
+      <section>
+        <h3 class="text-xl font-semibold mb-4">1. Policyholder Information</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <input id="customer_name" required placeholder="Full Name" class="p-3 border rounded-lg" />
+          <input id="customer_email" required type="email" placeholder="Email Address" class="p-3 border rounded-lg" />
+          <input id="phone" placeholder="Phone Number" class="p-3 border rounded-lg" />
+          <input id="policy_number" required placeholder="Policy Number" class="p-3 border rounded-lg" />
+          <div id="policyInfo" class="col-span-2 text-sm mt-2"></div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section>
+        <h3 class="text-xl font-semibold mb-4">2. Claim Details</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <select id="claim_type" required class="p-3 border rounded-lg">
+            <option value="">Select Claim Type</option>
+            <option value="Auto">Auto</option>
+            <option value="Home">Home</option>
+            <option value="Health">Health</option>
+            <option value="Business">Business</option>
+          </select>
+          <input id="claim_date" required type="date" class="p-3 border rounded-lg" />
+        </div>
+
+        <textarea id="description" required
+          placeholder="Briefly describe what happened"
+          class="w-full mt-4 p-3 border rounded-lg"></textarea>
+
+        <input id="claimed_amount" type="number" step="0.01" min="0" placeholder="Claimed Amount ($)" class="w-full mt-4 p-3 border rounded-lg" required />
+      </section>
+
+      <!-- STEP 3 -->
+      <section>
+        <h3 class="text-xl font-semibold mb-4">3. Supporting Documents</h3>
+        <input id="claim_documents" type="file" multiple class="block w-full p-3 border rounded-lg bg-gray-50" />
+        <p class="text-sm text-gray-500 mt-2">
+          Upload photos, reports, or invoices (optional).
+        </p>
+      </section>
+
+      <!-- STEP 4 -->
+      <section>
+        <h3 class="text-xl font-semibold mb-4">4. Authorization</h3>
+
+        <label class="flex items-start gap-2 text-sm text-gray-600">
+          <input id="authorize" type="checkbox" required class="mt-1" />
+          I confirm the information provided is accurate and I authorize
+          Insurify Claims to share this information with my insurer.
+        </label>
+
+        <p class="text-xs text-gray-500 mt-3">
+          Insurify Claims does not determine claim approval or payment.
+          All claims are reviewed by the insurance provider according to policy terms.
+        </p>
+      </section>
+
+      <!-- SUBMIT -->
+      <button type="submit"
+        class="w-full bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+        Submit Claim Securely
+      </button>
+
+      <p class="text-sm text-center text-gray-500">
+        🔒 Your information is encrypted and securely transmitted.
+      </p>
+
+    </form>
+
+    <script>
+            // Policy lookup on input
+            document.getElementById('policy_number').addEventListener('blur', async function() {
+              const policyNumber = this.value.trim();
+              const infoDiv = document.getElementById('policyInfo');
+              infoDiv.textContent = '';
+              if (!policyNumber) return;
+              infoDiv.textContent = 'Checking policy...';
+              try {
+                const policy = await PoliciesService.getPolicyByNumber(policyNumber);
+                infoDiv.innerHTML = `<span class='text-green-700'>✔ Policy found:</span> <b>${policy.customer_name}</b> (${policy.customer_email})<br>Coverage: $${policy.coverage_amount}`;
+                // Optionally autofill name/email
+                document.getElementById('customer_name').value = policy.customer_name;
+                document.getElementById('customer_email').value = policy.customer_email;
+              } catch (err) {
+                infoDiv.innerHTML = `<span class='text-red-700'>✖ ${err.message}</span>`;
+                document.getElementById('customer_name').value = '';
+                document.getElementById('customer_email').value = '';
+              }
+            });
+      document.getElementById('claimForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const claimData = {
+          policy_number: document.getElementById('policy_number').value,
+          customer_name: document.getElementById('customer_name').value,
+          customer_email: document.getElementById('customer_email').value,
+          claim_type: document.getElementById('claim_type').value,
+          claim_date: document.getElementById('claim_date').value,
+          description: document.getElementById('description').value,
+          claimed_amount: parseFloat(document.getElementById('claimed_amount').value)
+        };
+
+        try {
+          const result = await ClaimsService.submitClaim(claimData);
+          showAlert(`Claim submitted! Your claim number is: ${result.claim_number}`, 'success');
+          document.getElementById('claimForm').reset();
+          setTimeout(() => {
+            window.location.href = `confirmation.html?claim_number=${result.claim_number}`;
+          }, 1500);
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
+      });
+    </script>
+
+  </div>
+</main>
+
+<footer class="bg-gray-900 text-gray-400 py-6 text-center mt-16">
+  © 2013–2026 Insurify Claims. All rights reserved.
+</footer>
+
+</body>
+</html>

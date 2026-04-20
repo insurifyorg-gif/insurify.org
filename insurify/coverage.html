@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Coverage | Insurify Claims</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Understand the insurance coverage types supported by Insurify Claims, including auto, home, health, and business insurance." />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .fade-in { animation: fadeIn 1.2s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card-hover:hover {
+      box-shadow: 0 15px 40px rgba(37,99,235,0.15);
+      transform: translateY(-4px);
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="bg-blue-900 text-white relative">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="about.html" class="hover:text-blue-300">About</a>
+      <a href="services.html" class="hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+    </nav>
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+    <a href="about.html" class="block hover:text-blue-300">About</a>
+    <a href="services.html" class="block hover:text-blue-300">Services</a>
+    <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="py-20 fade-in">
+
+  <!-- INTRO -->
+  <section class="max-w-4xl mx-auto px-6 text-center mb-16">
+    <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text text-transparent mb-6">
+      Coverage We Support
+    </h1>
+    <p class="text-lg text-gray-600 leading-relaxed">
+      Understanding your coverage is critical to a successful claim.
+      Insurify Claims helps policyholders navigate coverage types, limits,
+      and exclusions—so there are no surprises.
+    </p>
+  </section>
+
+  <!-- COVERAGE TYPES -->
+  <section class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 mb-20">
+
+    <!-- Auto -->
+    <div class="bg-white p-10 rounded-2xl shadow-xl card-hover">
+      <h3 class="text-2xl font-semibold text-blue-900 mb-4">Auto Insurance Coverage</h3>
+      <p class="text-gray-600 mb-4">
+        Auto insurance coverage may apply to vehicle damage, liability,
+        injuries, or total loss following an accident or theft.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li>✔ Collision & comprehensive claims</li>
+        <li>✔ Liability & uninsured motorist coverage</li>
+        <li>✔ Rental reimbursement guidance</li>
+      </ul>
+    </div>
+
+    <!-- Home -->
+    <div class="bg-white p-10 rounded-2xl shadow-xl card-hover">
+      <h3 class="text-2xl font-semibold text-blue-900 mb-4">Homeowners Insurance Coverage</h3>
+      <p class="text-gray-600 mb-4">
+        Home insurance coverage can include property damage, personal belongings,
+        and liability depending on the policy.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li>✔ Fire, storm, and water damage</li>
+        <li>✔ Theft and vandalism claims</li>
+        <li>✔ Temporary living expense support</li>
+      </ul>
+    </div>
+
+    <!-- Health -->
+    <div class="bg-white p-10 rounded-2xl shadow-xl card-hover">
+      <h3 class="text-2xl font-semibold text-blue-900 mb-4">Health Insurance Coverage</h3>
+      <p class="text-gray-600 mb-4">
+        Health insurance coverage varies by plan and provider.
+        We help clarify eligible treatments and claim requirements.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li>✔ Hospital & medical services</li>
+        <li>✔ Prescription coverage support</li>
+        <li>✔ Claim denial review assistance</li>
+      </ul>
+    </div>
+
+    <!-- Business -->
+    <div class="bg-white p-10 rounded-2xl shadow-xl card-hover">
+      <h3 class="text-2xl font-semibold text-blue-900 mb-4">Business Insurance Coverage</h3>
+      <p class="text-gray-600 mb-4">
+        Business policies may cover property loss, liability,
+        or operational interruptions.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li>✔ Commercial property damage</li>
+        <li>✔ Business interruption claims</li>
+        <li>✔ General & professional liability</li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!-- COVERAGE NOTES -->
+  <section class="bg-blue-50 py-16 mb-20">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6">Important Coverage Notes</h2>
+      <p class="text-gray-600 leading-relaxed">
+        Coverage availability, limits, and exclusions depend on your individual policy.
+        Insurify Claims does not underwrite insurance policies—we provide guidance,
+        education, and claim support to help you understand your benefits.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-blue-900 mb-6">Not Sure What’s Covered?</h2>
+    <p class="text-gray-600 mb-8">
+      Our team can help you review your policy and identify applicable coverage
+      before you file a claim.
+    </p>
+    <a href="claims.html"
+       class="inline-block bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+      Start a Claim
+    </a>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-400 py-8 text-center">
+  <p>© 2013–2026 Insurify Claims. All rights reserved.</p>
+  <a href="index.html"
+     class="inline-block mt-4 bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+    Back to Home
+  </a>
+</footer>
+
+</body>
+</html>

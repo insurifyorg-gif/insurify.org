@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Services | Insurify Claims</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Explore Insurify Claims services including auto, home, health, and business insurance claims management." />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .fade-in { animation: fadeIn 1.2s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card-hover:hover {
+      box-shadow: 0 15px 40px rgba(37,99,235,0.15);
+      transform: translateY(-4px);
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="bg-blue-900 text-white relative">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="about.html" class="hover:text-blue-300">About</a>
+      <a href="services.html" class="hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+    </nav>
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+    <a href="about.html" class="block hover:text-blue-300">About</a>
+    <a href="services.html" class="block hover:text-blue-300">Services</a>
+    <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="py-20 fade-in">
+
+  <!-- INTRO -->
+  <section class="max-w-4xl mx-auto px-6 text-center mb-16">
+    <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text text-transparent mb-6">
+      Our Services
+    </h1>
+    <p class="text-lg text-gray-600 leading-relaxed">
+      Insurify Claims provides end-to-end insurance claims support designed to reduce delays,
+      eliminate confusion, and ensure fair outcomes—no matter the type of claim.
+    </p>
+  </section>
+
+  <!-- SERVICES GRID -->
+  <section class="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-20">
+
+    <!-- Auto -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl card-hover text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/743/743007.png" class="w-14 h-14 mx-auto mb-4" alt="Auto Claims">
+      <h3 class="text-xl font-semibold text-blue-900 mb-3">Auto Claims</h3>
+      <p class="text-gray-600 mb-4">
+        Accident, collision, theft, or total loss—we guide you through every step
+        to ensure accurate documentation and timely resolutions.
+      </p>
+      <ul class="text-sm text-gray-500 space-y-1">
+        <li>✔ Damage assessment support</li>
+        <li>✔ Claim tracking & updates</li>
+        <li>✔ Settlement guidance</li>
+      </ul>
+    </div>
+
+    <!-- Home -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl card-hover text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png" class="w-14 h-14 mx-auto mb-4" alt="Home Claims">
+      <h3 class="text-xl font-semibold text-blue-900 mb-3">Home Claims</h3>
+      <p class="text-gray-600 mb-4">
+        From storm damage to fire or theft, we help homeowners navigate complex
+        policies and claim requirements.
+      </p>
+      <ul class="text-sm text-gray-500 space-y-1">
+        <li>✔ Property damage claims</li>
+        <li>✔ Documentation assistance</li>
+        <li>✔ Repair & rebuild coordination</li>
+      </ul>
+    </div>
+
+    <!-- Health -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl card-hover text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png" class="w-14 h-14 mx-auto mb-4" alt="Health Claims">
+      <h3 class="text-xl font-semibold text-blue-900 mb-3">Health Claims</h3>
+      <p class="text-gray-600 mb-4">
+        Medical claims can be overwhelming. We help ensure submissions are accurate,
+        complete, and processed without unnecessary delays.
+      </p>
+      <ul class="text-sm text-gray-500 space-y-1">
+        <li>✔ Claim filing assistance</li>
+        <li>✔ Denial review support</li>
+        <li>✔ Provider coordination</li>
+      </ul>
+    </div>
+
+    <!-- Business -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl card-hover text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-14 h-14 mx-auto mb-4" alt="Business Claims">
+      <h3 class="text-xl font-semibold text-blue-900 mb-3">Business Claims</h3>
+      <p class="text-gray-600 mb-4">
+        Protect your operations with expert support for liability, property,
+        and interruption-related insurance claims.
+      </p>
+      <ul class="text-sm text-gray-500 space-y-1">
+        <li>✔ Commercial property claims</li>
+        <li>✔ Business interruption support</li>
+        <li>✔ Risk documentation guidance</li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!-- WHO IT'S FOR -->
+  <section class="bg-blue-50 py-16 mb-20">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6">Who We Serve</h2>
+      <p class="text-gray-600 leading-relaxed">
+        Our services are built for individuals, families, small businesses,
+        and organizations seeking clarity, speed, and confidence during the
+        claims process.
+      </p>
+    </div>
+  </section>
+
+  <!-- WHY INSURIFY -->
+  <section class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-blue-900 mb-6">Why Insurify Claims?</h2>
+    <p class="text-gray-600 leading-relaxed">
+      We combine expert insight with modern technology to reduce stress,
+      minimize delays, and help policyholders achieve fair outcomes—without
+      navigating the system alone.
+    </p>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-400 py-8 text-center">
+  <p>© 2013–2026 Insurify Claims. All rights reserved.</p>
+  <a href="index.html" class="inline-block mt-4 bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+    Back to Home
+  </a>
+</footer>
+
+</body>
+</html>
