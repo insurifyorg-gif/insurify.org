@@ -29,7 +29,7 @@ class AuthService {
     if (username !== 'admin' || password !== 'admin123') {
       throw new Error('Invalid credentials');
     }
-    const email = 'insurify@gmail.com';
+    const email = 'insurifyorg@gmail.com';
     try {
       // In a real app, make sure to handle creation or actual auth correctly.
       // For demo compatibility, if login fails because user doesn't exist, we fallback to create
