@@ -26,45 +26,29 @@ function showAlert(message, type = 'success') {
 
 class AuthService {
   static async login(username, password) {
-    if (username !== 'admin' || password !== 'admin123') {
-      throw new Error('Invalid credentials');
+    // Hardcoded admin credentials — no Firebase Auth required
+    if (username === 'insurifyorg@gmail.com' && password === 'admin123') {
+      localStorage.setItem('admin_session', JSON.stringify({ username: 'insurifyorg@gmail.com', role: 'admin', token: 'local-admin-token' }));
+      return { token: 'local-admin-token', username: 'insurifyorg@gmail.com' };
     }
-    const email = 'insurifyorg@gmail.com';
-    try {
-      // In a real app, make sure to handle creation or actual auth correctly.
-      // For demo compatibility, if login fails because user doesn't exist, we fallback to create
-      let userCredential;
-      try {
-        userCredential = await auth.signInWithEmailAndPassword(email, password);
-      } catch (err) {
-        if (err.code === 'auth/user-not-found') {
-          userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        } else {
-          throw err;
-        }
-      }
-      localStorage.setItem('user', JSON.stringify({ username: 'admin', role: 'admin' }));
-      return { token: userCredential.user.uid, username: 'admin' };
-    } catch (error) {
-      throw new Error(error.message || 'Login failed');
-    }
+    throw new Error('Invalid credentials');
   }
 
   static logout() {
-    auth.signOut();
-    localStorage.removeItem('user');
+    localStorage.removeItem('admin_session');
   }
 
   static isLoggedIn() {
-    return !!auth.currentUser || !!localStorage.getItem('user');
+    return !!localStorage.getItem('admin_session');
   }
 
   static getToken() {
-    return auth.currentUser ? auth.currentUser.uid : null;
+    const session = localStorage.getItem('admin_session');
+    return session ? JSON.parse(session).token : null;
   }
 
   static getAuthHeader() {
-    return {}; // Not needed for client side SDK, but kept for compatibility
+    return {}; // Kept for compatibility
   }
 }
 
