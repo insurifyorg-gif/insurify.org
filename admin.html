@@ -99,7 +99,7 @@
                 <option value="Business">Business Insurance</option>
                 <option value="Recovery Audit">Recovery Audit</option>
               </select>
-              <input id="policy-coverage" required type="text" placeholder="Coverage Amount (e.g. 1000-50000)" class="p-3 border rounded-lg" />
+              <input id="policy-coverage" required type="text" placeholder="Coverage Amount (e.g. 1000-50000 or 12500)" class="p-3 border rounded-lg" />
               <input id="policy-start-date" required type="date" class="p-3 border rounded-lg" />
               <input id="policy-end-date" required type="date" class="p-3 border rounded-lg" />
               <button type="submit" class="md:col-span-2 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">Create Policy</button>
@@ -197,9 +197,9 @@
       e.preventDefault();
 
       const coverage = document.getElementById('policy-coverage').value.trim();
-      // Accepts any two positive integers separated by a hyphen (e.g. 500-1000000)
-      if (!/^\d+\s*-\s*\d+$/.test(coverage)) {
-        showAlert('Coverage amount must be a range, e.g. 1000-50000', 'error');
+      // Accepts any two positive integers separated by a hyphen (e.g. 500-1000000) or a single positive integer (e.g. 12500)
+      if (!/^\d+(\s*-\s*\d+)?$/.test(coverage)) {
+        showAlert('Coverage amount must be a number or a range, e.g. 12500 or 1000-50000', 'error');
         return;
       }
       const policyData = {
@@ -246,20 +246,20 @@
                 <div class="mt-2">
                   <span class="text-xs text-gray-700">Deductible: </span>
                   <span class="text-xs font-semibold ${claim.deductible_reason ? 'text-red-700' : 'text-gray-400'}">
-                    ${claim.deductible_reason ? `$${claim.deductible_amount?.toFixed(2) || '0.00'} - ${claim.deductible_reason}` : 'Not set'}
+                    ${claim.deductible_reason ? \`$\${claim.deductible_amount?.toFixed(2) || '0.00'} - \${claim.deductible_reason}\` : 'Not set'}
                   </span>
                 </div>
               </div>
               <div class="flex flex-col gap-2 items-end">
-                <select class="p-2 border rounded-lg text-sm mb-2" onchange="updateClaimStatus('${claim.claim_number}', this.value)">
-                  <option value="${claim.status}" selected>${claim.status}</option>
+                <select class="p-2 border rounded-lg text-sm mb-2" onchange="updateClaimStatus('\${claim.claim_number}', this.value)">
+                  <option value="\${claim.status}" selected>\${claim.status}</option>
                   <option value="pending">Pending</option>
                   <option value="approved">Approved</option>
                   <option value="rejected">Rejected</option>
                   <option value="paid">Paid</option>
                 </select>
-                <button class="bg-yellow-500 text-white px-3 py-1 rounded text-xs font-semibold hover:bg-yellow-600" onclick="openDeductibleModal('${claim.claim_number}', '${claim.customer_name}', '${claim.deductible_amount || ''}', '${claim.deductible_reason || ''}')">
-                  ${claim.deductible_reason ? 'Edit Deductible' : 'Set Deductible'}
+                <button class="bg-yellow-500 text-white px-3 py-1 rounded text-xs font-semibold hover:bg-yellow-600" onclick="openDeductibleModal('\${claim.claim_number}', '\${claim.customer_name}', '\${claim.deductible_amount || ''}', '\${claim.deductible_reason || ''}')">
+                  \${claim.deductible_reason ? 'Edit Deductible' : 'Set Deductible'}
                 </button>
               </div>
             </div>
@@ -271,7 +271,7 @@
     async function updateClaimStatus(claimNumber, status) {
       try {
         await ClaimsService.updateClaimStatus(claimNumber, status);
-        showAlert(`Claim ${claimNumber} updated to ${status}`, 'success');
+        showAlert(\`Claim \${claimNumber} updated to \${status}\`, 'success');
         loadAllClaims();
         loadDashboard();
       } catch (error) {
@@ -296,11 +296,11 @@
           <div class="bg-gray-50 border rounded-lg p-4">
             <div class="flex justify-between items-start">
               <div>
-                <p class="font-semibold text-blue-900">${policy.policy_number}</p>
-                <p class="text-sm text-gray-600">${policy.customer_name} - ${policy.policy_type}</p>
-                <p class="text-xs text-gray-500">Coverage: $${policy.coverage_amount} | Status: ${policy.status}</p>
+                <p class="font-semibold text-blue-900">\${policy.policy_number}</p>
+                <p class="text-sm text-gray-600">\${policy.customer_name} - \${policy.policy_type}</p>
+                <p class="text-xs text-gray-500">Coverage: $\${policy.coverage_amount} | Status: \${policy.status}</p>
               </div>
-              <button onclick="deletePolicy('${policy.policy_number}')" class="text-red-600 hover:underline text-sm font-semibold">Delete</button>
+              <button onclick="deletePolicy('\${policy.policy_number}')" class="text-red-600 hover:underline text-sm font-semibold">Delete</button>
             </div>
           </div>
         `).join('');
@@ -363,17 +363,17 @@
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-2">
           <div class="flex justify-between items-start">
             <div>
-              <p class="font-semibold text-blue-900">${payment.claim_number}</p>
-              <p class="text-sm text-gray-600">${payment.customer_name} (${payment.customer_email})</p>
-              <p class="text-xs text-gray-500">Claim Type: ${payment.claim_type}</p>
-              <p class="text-sm font-semibold text-red-700 mt-2">Payment Amount: $${payment.deductible_amount?.toFixed(2) || '0.00'}</p>
+              <p class="font-semibold text-blue-900">\${payment.claim_number}</p>
+              <p class="text-sm text-gray-600">\${payment.customer_name} (\${payment.customer_email})</p>
+              <p class="text-xs text-gray-500">Claim Type: \${payment.claim_type}</p>
+              <p class="text-sm font-semibold text-red-700 mt-2">Payment Amount: $\${payment.deductible_amount?.toFixed(2) || '0.00'}</p>
               <p class="text-xs text-gray-700 mt-1">User clicked "Mark as Paid" - Awaiting your confirmation</p>
             </div>
             <div class="flex flex-col gap-2 items-end">
-              <button onclick="approvePayment('${payment.claim_number}')" class="bg-green-600 text-white px-3 py-2 rounded text-xs font-semibold hover:bg-green-700">
+              <button onclick="approvePayment('\${payment.claim_number}')" class="bg-green-600 text-white px-3 py-2 rounded text-xs font-semibold hover:bg-green-700">
                 Payment Seen ✓
               </button>
-              <button onclick="rejectPayment('${payment.claim_number}')" class="bg-red-600 text-white px-3 py-2 rounded text-xs font-semibold hover:bg-red-700">
+              <button onclick="rejectPayment('\${payment.claim_number}')" class="bg-red-600 text-white px-3 py-2 rounded text-xs font-semibold hover:bg-red-700">
                 Payment Not Seen ✗
               </button>
             </div>
@@ -385,7 +385,7 @@
     // Approve Payment
     async function approvePayment(claimNumber) {
       try {
-        const response = await fetch(`/api/claims/${claimNumber}/payment-review`, {
+        const response = await fetch(\`/api/claims/\${claimNumber}/payment-review\`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -396,7 +396,7 @@
         if (!response.ok) {
           throw new Error('Failed to approve payment');
         }
-        showAlert(`Payment for ${claimNumber} approved!`, 'success');
+        showAlert(\`Payment for \${claimNumber} approved!\`, 'success');
         loadPendingPayments();
         loadAllClaims();
       } catch (error) {
@@ -410,7 +410,7 @@
         return;
       }
       try {
-        const response = await fetch(`/api/claims/${claimNumber}/payment-review`, {
+        const response = await fetch(\`/api/claims/\${claimNumber}/payment-review\`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -421,7 +421,7 @@
         if (!response.ok) {
           throw new Error('Failed to reject payment');
         }
-        showAlert(`Payment for ${claimNumber} rejected. User will need to resubmit.`, 'success');
+        showAlert(\`Payment for \${claimNumber} rejected. User will need to resubmit.\`, 'success');
         loadPendingPayments();
         loadAllClaims();
       } catch (error) {
@@ -436,7 +436,7 @@
       if (!modal) {
         modal = document.createElement('div');
         modal.id = 'deductible-modal';
-        modal.innerHTML = `
+        modal.innerHTML = \`
           <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
               <h2 class="text-xl font-bold mb-4 text-blue-900">Set Deductible for Claim <span id="modal-claim-number"></span></h2>
@@ -468,7 +468,7 @@
               </form>
             </div>
           </div>
-        `;
+        \`;
         document.body.appendChild(modal);
       }
       // Set values
@@ -498,9 +498,9 @@
           return;
         }
         try {
-          await fetch(`/api/claims/${claimNumber}/deductible`, {
+          await fetch(\`/api/claims/\${claimNumber}/deductible\`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AuthService.getToken()}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${AuthService.getToken()}\` },
             body: JSON.stringify({ deductible_amount: amount, deductible_reason: reason, payment_account_detail: paymentAccountDetail, due_date: dueDate })
           });
           showAlert('Deductible updated!', 'success');
