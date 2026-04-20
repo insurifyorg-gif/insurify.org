@@ -1,139 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Insurify</title>
-    <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
-    <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
-    <meta property="og:title" content="Insurify Claims Management" />
-    <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
-    <meta property="og:type" content="website" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="insurify_logo.png" />
-    <link rel="stylesheet" href="insurance.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
 
-  <body class="bg-gray-50">
-    <!-- Main Content -->
-    <header class="bg-blue-900 text-white relative">
-      <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
-          <h1 class="text-2xl font-bold">Insurify Claims</h1>
-        </div>
-        <nav class="space-x-6 hidden md:block">
-          <a href="about.html" class="hover:text-blue-300">About</a>
-          <a href="services.html" class="hover:text-blue-300">Services</a>
-          <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
-          <a href="claims.html" class="hover:text-blue-300">Claims</a>
-          <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
-          <a href="contact.html" class="hover:text-blue-300">Contact</a>
-        </nav>
-        <div class="md:hidden flex items-center">
-          <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Insurify</title>
+  <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
+  <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
+  <meta property="og:title" content="Insurify Claims Management" />
+  <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
+  <meta property="og:type" content="website" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="insurify_logo.png" />
+  <link rel="stylesheet" href="insurance.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+  <!-- Main Content -->
+  <header class="bg-blue-900 text-white relative">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo"
+          class="w-10 h-10 bg-white rounded-full p-1" />
+        <h1 class="text-2xl font-bold">Insurify Claims</h1>
       </div>
-      <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
-        <a href="about.html" class="block hover:text-blue-300">About</a>
-        <a href="services.html" class="block hover:text-blue-300">Services</a>
-        <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
-        <a href="claims.html" class="block hover:text-blue-300">Claims</a>
-        <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
-        <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+      <nav class="space-x-6 hidden md:block">
+        <a href="about.html" class="hover:text-blue-300">About</a>
+        <a href="services.html" class="hover:text-blue-300">Services</a>
+        <a href="coverage.html" class="hover:text-blue-300">Coverage</a>
+        <a href="claims.html" class="hover:text-blue-300">Claims</a>
+        <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+        <a href="contact.html" class="hover:text-blue-300">Contact</a>
+      </nav>
+      <div class="md:hidden flex items-center">
+        <button id="menu-btn" class="text-white focus:outline-none"
+          onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
-    </header>
+    </div>
+    <div id="mobile-nav"
+      class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+      <a href="about.html" class="block hover:text-blue-300">About</a>
+      <a href="services.html" class="block hover:text-blue-300">Services</a>
+      <a href="coverage.html" class="block hover:text-blue-300">Coverage</a>
+      <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+      <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+    </div>
+  </header>
 
-    <main>
-      <section class="bg-blue-900 bg-gradient-to-r to-blue-700 text-white py-20">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-          <h2 class="text-4xl md:text-5xl font-bold mb-4">Smart Claims Management Made Simple</h2>
-          <p class="text-lg mb-8">Compare, choose, and manage insurance with confidence.</p>
-          <a href="contact.html" class="inline-block bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">Get a Quote</a>
-        </div>
-      </section>
+  <main>
+    <section class="bg-blue-900 bg-gradient-to-r to-blue-700 text-white py-20">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4">Smart Claims Management Made Simple</h2>
+        <p class="text-lg mb-8">Compare, choose, and manage insurance with confidence.</p>
+        <a href="contact.html"
+          class="inline-block bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">Get
+          a Quote</a>
+      </div>
+    </section>
 
-      <section id="about" class="py-16">
-        <div class="max-w-6xl mx-auto px-6">
-          <h3 class="text-3xl font-bold mb-6 text-center">About Insurify Claims</h3>
-          <p class="text-gray-600 text-center max-w-3xl mx-auto">Insurify Claims helps individuals and businesses manage and track insurance claims with transparency and ease. We make the claims process fast, clear, and simple.</p>
-        </div>
-      </section>
+    <section id="about" class="py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-3xl font-bold mb-6 text-center">About Insurify Claims</h3>
+        <p class="text-gray-600 text-center max-w-3xl mx-auto">Insurify Claims helps individuals and businesses manage
+          and track insurance claims with transparency and ease. We make the claims process fast, clear, and simple.</p>
+      </div>
+    </section>
 
-      <section id="services" class="bg-gray-100 py-16">
-        <div class="max-w-6xl mx-auto px-6">
-          <h3 class="text-3xl font-bold mb-10 text-center">Our Services</h3>
-          <div class="grid md:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-              <h4 class="font-semibold text-lg mb-2">Auto Claims</h4>
-              <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-              <h4 class="font-semibold text-lg mb-2">Home Claims</h4>
-              <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-              <h4 class="font-semibold text-lg mb-2">Health Claims</h4>
-              <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-              <h4 class="font-semibold text-lg mb-2">Business Claims</h4>
-              <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
-            </div>
+    <section id="services" class="bg-gray-100 py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-3xl font-bold mb-10 text-center">Our Services</h3>
+        <div class="grid md:grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h4 class="font-semibold text-lg mb-2">Auto Claims</h4>
+            <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h4 class="font-semibold text-lg mb-2">Home Claims</h4>
+            <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h4 class="font-semibold text-lg mb-2">Health Claims</h4>
+            <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h4 class="font-semibold text-lg mb-2">Business Claims</h4>
+            <p class="text-gray-600">Fast, transparent, and reliable claims management.</p>
           </div>
         </div>
-      </section>
-
-      <section id="coverage" class="py-16">
-        <div class="max-w-6xl mx-auto px-6">
-          <h3 class="text-3xl font-bold mb-6 text-center">Coverage</h3>
-          <p class="text-gray-600 text-center max-w-3xl mx-auto">Learn about the types of coverage we support and how to maximize your claim benefits. (Add your coverage details here.)</p>
-        </div>
-      </section>
-
-      <section id="claims" class="bg-gray-100 py-16">
-        <div class="max-w-6xl mx-auto px-6">
-          <h3 class="text-3xl font-bold mb-6 text-center">Claims</h3>
-          <p class="text-gray-600 text-center max-w-3xl mx-auto">Submit, track, and manage your insurance claims all in one place. (Add your claims process or dashboard here.)</p>
-        </div>
-      </section>
-
-      <section id="report" class="py-16">
-        <div class="max-w-6xl mx-auto px-6">
-          <h3 class="text-3xl font-bold mb-6 text-center">Report</h3>
-          <p class="text-gray-600 text-center max-w-3xl mx-auto">Generate and view reports on your claims and coverage. (Add your reporting features here.)</p>
-        </div>
-      </section>
-
-      <section id="contact" class="py-16">
-        <div class="max-w-4xl mx-auto px-6">
-          <h3 class="text-3xl font-bold mb-6 text-center">Contact Us</h3>
-          <form class="bg-white p-8 rounded-xl shadow space-y-4">
-            <div>
-              <label class="block font-medium">Name</label>
-              <input type="text" class="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your name" />
-            </div>
-            <div>
-              <label class="block font-medium">Email</label>
-              <input type="email" class="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="you@example.com" />
-            </div>
-            <div>
-              <label class="block font-medium">Message</label>
-              <textarea rows="4" class="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="How can we help?"></textarea>
-            </div>
-            <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-800">Send Message</button>
-          </form>
-        </div>
-      </section>
-    </main>
-
-    <footer class="bg-gray-900 text-gray-400 py-6 text-center">
-      © 2013-2026 Insurify Claims. All rights reserved.
-      <div class="mt-4">
-        <a href="index.html" class="inline-block bg-blue-900 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-800 transition">Back to Home</a>
       </div>
-    </footer>
+    </section>
+
+    <section id="coverage" class="py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-3xl font-bold mb-6 text-center">Coverage</h3>
+        <p class="text-gray-600 text-center max-w-3xl mx-auto">Learn about the types of coverage we support and how to
+          maximize your claim benefits. (Add your coverage details here.)</p>
+      </div>
+    </section>
+
+    <section id="claims" class="bg-gray-100 py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-3xl font-bold mb-6 text-center">Claims</h3>
+        <p class="text-gray-600 text-center max-w-3xl mx-auto">Submit, track, and manage your insurance claims all in
+          one place. (Add your claims process or dashboard here.)</p>
+      </div>
+    </section>
+
+    <section id="report" class="py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-3xl font-bold mb-6 text-center">Report</h3>
+        <p class="text-gray-600 text-center max-w-3xl mx-auto">Generate and view reports on your claims and coverage.
+          (Add your reporting features here.)</p>
+      </div>
+    </section>
+
+    <section id="contact" class="py-16">
+      <div class="max-w-4xl mx-auto px-6">
+        <h3 class="text-3xl font-bold mb-6 text-center">Contact Us</h3>
+        <form class="bg-white p-8 rounded-xl shadow space-y-4">
+          <div>
+            <label class="block font-medium">Name</label>
+            <input type="text"
+              class="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Your name" />
+          </div>
+          <div>
+            <label class="block font-medium">Email</label>
+            <input type="email"
+              class="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="you@example.com" />
+          </div>
+          <div>
+            <label class="block font-medium">Message</label>
+            <textarea rows="4"
+              class="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="How can we help?"></textarea>
+          </div>
+          <button type="submit"
+            class="w-full bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-800">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-gray-400 py-6 text-center">
+    © 2013-2026 Insurify Claims. All rights reserved.
+    <div class="mt-4">
+      <a href="index.html"
+        class="inline-block bg-blue-900 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-800 transition">Back
+        to Home</a>
+    </div>
+  </footer>
