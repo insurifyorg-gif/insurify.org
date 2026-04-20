@@ -195,10 +195,10 @@
     // Create Policy
     document.getElementById('createPolicyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const coverage = document.getElementById('policy-coverage').value.trim();
-      // Validate format: number-number (e.g. 1000-50000)
-      if (!/^\d{3,6}\s*-\s*\d{3,6}$/.test(coverage)) {
+      // Accepts any two positive integers separated by a hyphen (e.g. 500-1000000)
+      if (!/^\d+\s*-\s*\d+$/.test(coverage)) {
         showAlert('Coverage amount must be a range, e.g. 1000-50000', 'error');
         return;
       }
