@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Recovery Audit | Insurify Admin</title>
-  <meta name="description" content="Recovery Audit management — Admin only." />
+  <title>Recovery Audit | Insurify</title>
+  <meta name="description" content="Look up your Recovery Audit policy details with Insurify." />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="insurify_logo.png" />
   <link rel="stylesheet" href="insurance.css" />
@@ -14,292 +14,297 @@
   <script src="firebase-config.js"></script>
   <script src="api-client.js"></script>
   <style>
-    .fade-in { animation: fadeIn 0.7s ease; }
+    .fade-in { animation: fadeIn 0.6s ease; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(24px); }
+      from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: none; }
     }
-    .audit-card { transition: box-shadow 0.2s, transform 0.2s; }
-    .audit-card:hover { box-shadow: 0 8px 32px rgba(37,99,235,0.13); transform: translateY(-2px); }
-    .badge-ra { background: linear-gradient(90deg,#1e3a8a,#2563eb); }
+    .gradient-header { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); }
+    .info-row { display: flex; gap: 8px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-weight: 600; color: #1e3a8a; min-width: 160px; }
+    .info-value { color: #374151; }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-active   { background:#dcfce7; color:#166534; }
+    .status-pending  { background:#fef9c3; color:#854d0e; }
+    .status-approved { background:#dbeafe; color:#1e40af; }
+    .status-rejected { background:#fee2e2; color:#991b1b; }
+    .status-paid     { background:#e0e7ff; color:#3730a3; }
+    .pulse-ring {
+      animation: pulseRing 2s cubic-bezier(0.455,0.03,0.515,0.955) infinite;
+    }
+    @keyframes pulseRing {
+      0%   { box-shadow: 0 0 0 0 rgba(37,99,235,0.3); }
+      70%  { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
+      100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+    }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 min-h-screen">
 
-<!-- ACCESS GUARD: shown while checking session -->
-<div id="access-denied" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50" style="display:none!important;">
-  <div class="bg-white rounded-2xl shadow-2xl p-10 max-w-sm w-full text-center">
-    <div class="text-5xl mb-4">🔒</div>
-    <h2 class="text-2xl font-bold text-red-700 mb-2">Access Restricted</h2>
-    <p class="text-gray-600 mb-6">This section is for Insurify administrators only.</p>
-    <a href="index.html" class="inline-block bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">Go to Home</a>
+<!-- HEADER -->
+<header class="gradient-header text-white">
+  <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Logo" class="w-10 h-10 bg-white rounded-full p-1" />
+      <h1 class="text-2xl font-bold">Insurify Claims</h1>
+    </div>
+    <nav class="space-x-6 hidden md:block">
+      <a href="index.html" class="hover:text-blue-300">Home</a>
+      <a href="claims.html" class="hover:text-blue-300">Claims</a>
+      <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+      <a href="contact.html" class="hover:text-blue-300">Contact</a>
+      <a href="recovery-audit.html" class="text-yellow-300 font-semibold">Recovery Audit</a>
+    </nav>
+    <div class="md:hidden">
+      <button onclick="document.getElementById('ra-mobile-nav').classList.toggle('hidden')" class="text-white">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
   </div>
-</div>
+  <div id="ra-mobile-nav" class="hidden md:hidden bg-blue-900 px-6 py-4 space-y-2">
+    <a href="index.html" class="block hover:text-blue-300">Home</a>
+    <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+    <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
+    <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+    <a href="recovery-audit.html" class="block text-yellow-300 font-semibold">Recovery Audit</a>
+  </div>
+</header>
 
-<!-- MAIN PAGE (hidden until auth confirmed) -->
-<div id="ra-page" style="display:none;">
+<!-- HERO BAND -->
+<section class="gradient-header text-white py-10 px-6 border-t border-blue-700">
+  <div class="max-w-3xl mx-auto text-center">
+    <div class="text-5xl mb-3">🔍</div>
+    <h2 class="text-3xl md:text-4xl font-extrabold mb-2">Recovery Audit Portal</h2>
+    <p class="text-blue-200 text-lg">Enter your policy number to view your Recovery Audit policy details and claim status.</p>
+  </div>
+</section>
 
-  <!-- HEADER -->
-  <header class="bg-blue-900 text-white relative">
-    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Logo" class="w-10 h-10 bg-white rounded-full p-1" />
-        <h1 class="text-2xl font-bold">Insurify — Recovery Audit</h1>
+<!-- MAIN -->
+<main class="max-w-3xl mx-auto px-6 py-12">
+
+  <!-- LOOKUP FORM -->
+  <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 fade-in">
+    <h3 class="text-xl font-bold text-blue-900 mb-1">Policy Lookup</h3>
+    <p class="text-gray-500 text-sm mb-6">Enter your Recovery Audit policy number below to retrieve your information.</p>
+
+    <div class="flex gap-3">
+      <input
+        id="ra-policy-input"
+        type="text"
+        placeholder="e.g. POL-1713600000000-ABC12"
+        class="flex-1 p-3 border-2 border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition pulse-ring text-sm"
+      />
+      <button
+        id="ra-lookup-btn"
+        onclick="lookupPolicy()"
+        class="bg-blue-800 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 active:scale-95 transition"
+      >
+        Look Up
+      </button>
+    </div>
+    <p id="ra-error" class="text-red-600 text-sm mt-3 hidden"></p>
+  </div>
+
+  <!-- RESULTS (hidden until lookup) -->
+  <div id="ra-results" class="hidden fade-in space-y-6">
+
+    <!-- Policy Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="gradient-header text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <p class="text-blue-200 text-xs font-semibold uppercase tracking-wider">Recovery Audit Policy</p>
+          <p id="res-policy-number" class="text-xl font-bold mt-0.5"></p>
+        </div>
+        <span id="res-status-badge" class="status-badge"></span>
       </div>
-      <nav class="space-x-6 hidden md:flex items-center">
-        <a href="index.html" class="hover:text-blue-300">Home</a>
-        <a href="claims.html" class="hover:text-blue-300">Claims</a>
-        <a href="admin.html" class="hover:text-blue-300">Admin Portal</a>
-        <button id="ra-logout-btn" class="bg-red-600 text-white px-4 py-1.5 rounded-lg font-semibold hover:bg-red-700 transition text-sm">Logout</button>
-      </nav>
-      <div class="md:hidden flex items-center">
-        <button class="text-white focus:outline-none" onclick="document.getElementById('ra-mobile-nav').classList.toggle('hidden')">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <div id="ra-mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
-      <a href="index.html" class="block hover:text-blue-300">Home</a>
-      <a href="claims.html" class="block hover:text-blue-300">Claims</a>
-      <a href="admin.html" class="block hover:text-blue-300">Admin Portal</a>
-    </div>
-  </header>
-
-  <!-- BANNER -->
-  <section class="badge-ra text-white py-10 px-6">
-    <div class="max-w-5xl mx-auto fade-in">
-      <div class="flex items-center gap-4 mb-2">
-        <span class="text-4xl">🔍</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold">Recovery Audit</h2>
-      </div>
-      <p class="text-blue-200 text-lg mt-1">Admin-only view for Recovery Audit policies and associated claims. All data is live from Firestore.</p>
-    </div>
-  </section>
-
-  <main class="max-w-5xl mx-auto px-6 py-10 fade-in">
-
-    <!-- Highlighted policy from URL param (when redirected from claim form) -->
-    <div id="highlighted-policy-banner" class="hidden mb-8 bg-yellow-50 border-l-4 border-yellow-400 rounded-xl p-5 shadow">
-      <p class="text-yellow-800 font-semibold text-lg">⚡ Recovery Audit Policy Detected</p>
-      <p id="highlighted-policy-text" class="text-yellow-700 mt-1 text-sm"></p>
-    </div>
-
-    <!-- Stats row -->
-    <div class="grid md:grid-cols-3 gap-4 mb-10">
-      <div class="bg-white border border-blue-100 rounded-xl p-5 shadow text-center">
-        <p class="text-gray-500 text-sm mb-1">Total Recovery Audit Policies</p>
-        <p id="stat-ra-policies" class="text-4xl font-bold text-blue-900">—</p>
-      </div>
-      <div class="bg-white border border-yellow-100 rounded-xl p-5 shadow text-center">
-        <p class="text-gray-500 text-sm mb-1">Active</p>
-        <p id="stat-ra-active" class="text-4xl font-bold text-yellow-700">—</p>
-      </div>
-      <div class="bg-white border border-green-100 rounded-xl p-5 shadow text-center">
-        <p class="text-gray-500 text-sm mb-1">Associated Claims</p>
-        <p id="stat-ra-claims" class="text-4xl font-bold text-green-700">—</p>
+      <div class="px-6 py-5">
+        <div class="info-row">
+          <span class="info-label">Customer Name</span>
+          <span id="res-name" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span id="res-email" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Policy Type</span>
+          <span class="info-value font-semibold text-blue-700">Recovery Audit</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Coverage Amount</span>
+          <span id="res-coverage" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Policy Start</span>
+          <span id="res-start" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Policy End</span>
+          <span id="res-end" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Created</span>
+          <span id="res-created" class="info-value"></span>
+        </div>
       </div>
     </div>
 
-    <!-- Search -->
-    <div class="mb-6 flex gap-3">
-      <input id="ra-search" type="text" placeholder="Search by customer name, email or policy number…"
-        class="flex-1 p-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none" />
-      <button onclick="filterCards()" class="bg-blue-800 text-white px-5 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Search</button>
-      <button onclick="clearSearch()" class="bg-gray-200 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-300 transition">Clear</button>
+    <!-- Linked Claims -->
+    <div>
+      <h3 class="text-lg font-bold text-blue-900 mb-3">Linked Claims</h3>
+      <div id="res-claims" class="space-y-4">
+        <p class="text-gray-400 text-sm">Loading claims…</p>
+      </div>
     </div>
 
-    <!-- Policies List -->
-    <h3 class="text-xl font-bold text-blue-900 mb-4">Recovery Audit Policies</h3>
-    <div id="ra-policies-list" class="space-y-4">
-      <p class="text-gray-400">Loading recovery audit policies…</p>
+    <!-- Divider + back button -->
+    <div class="text-center pt-4">
+      <button onclick="resetLookup()" class="text-blue-600 hover:underline text-sm font-semibold">← Search another policy</button>
     </div>
 
-    <!-- Claims for RA policies -->
-    <h3 class="text-xl font-bold text-blue-900 mb-4 mt-12">Claims Linked to Recovery Audit Policies</h3>
-    <div id="ra-claims-list" class="space-y-4">
-      <p class="text-gray-400">Loading claims…</p>
-    </div>
+  </div>
 
-  </main>
+</main>
 
-  <footer class="bg-gray-900 text-gray-400 py-6 text-center mt-12">
-    © 2013–2026 Insurify Claims. All rights reserved. &nbsp;|&nbsp; Recovery Audit — Admin Section
-  </footer>
-
-</div><!-- end #ra-page -->
+<footer class="bg-gray-900 text-gray-400 py-6 text-center mt-8">
+  <p>© 2013–2026 Insurify Claims. All rights reserved.</p>
+</footer>
 
 <script>
-  // ── Auth guard ──────────────────────────────────────────────────────────────
-  (function checkAccess() {
-    const session = localStorage.getItem('admin_session');
-    if (!session) {
-      // Not logged in: show blocked screen and hide page
-      document.getElementById('access-denied').style.cssText   = '';
-      document.getElementById('ra-page').style.display         = 'none';
-    } else {
-      document.getElementById('access-denied').style.cssText   = 'display:none!important';
-      document.getElementById('ra-page').style.display         = '';
-      init();
+  // Auto-fill from URL ?policy= param (redirect from claim form)
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const policyParam = params.get('policy');
+    if (policyParam) {
+      document.getElementById('ra-policy-input').value = policyParam;
+      lookupPolicy();
     }
-  })();
-
-  document.getElementById('ra-logout-btn')?.addEventListener('click', () => {
-    AuthService.logout();
-    window.location.href = 'admin.html';
   });
 
-  // ── Global state ────────────────────────────────────────────────────────────
-  let allRAPolicies = [];
-  let allRAClaims   = [];
+  // ── Lookup ──────────────────────────────────────────────────────────────────
+  async function lookupPolicy() {
+    const input     = document.getElementById('ra-policy-input');
+    const errEl     = document.getElementById('ra-error');
+    const resultsEl = document.getElementById('ra-results');
+    const btn       = document.getElementById('ra-lookup-btn');
 
-  // ── Init ─────────────────────────────────────────────────────────────────────
-  async function init() {
-    // Check URL param for highlighted policy
-    const params = new URLSearchParams(window.location.search);
-    const highlightPolicy = params.get('policy');
-    if (highlightPolicy) {
-      document.getElementById('highlighted-policy-banner').classList.remove('hidden');
-      document.getElementById('highlighted-policy-text').textContent =
-        `Policy number "${highlightPolicy}" is a Recovery Audit policy. Review the full details below.`;
+    const policyNumber = input.value.trim();
+    if (!policyNumber) {
+      showErr('Please enter a policy number.');
+      return;
     }
 
-    await Promise.all([loadRAPolicies(), loadRAClaims()]);
-    updateStats();
+    btn.textContent = 'Looking up…';
+    btn.disabled    = true;
+    errEl.classList.add('hidden');
+    resultsEl.classList.add('hidden');
 
-    // Auto-scroll to highlighted policy card if param present
-    if (highlightPolicy) {
-      setTimeout(() => {
-        const card = document.getElementById('policy-card-' + highlightPolicy);
-        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 400);
-    }
-  }
-
-  // ── Load RA Policies ─────────────────────────────────────────────────────────
-  async function loadRAPolicies() {
     try {
-      const snapshot = await db.collection('policies')
-        .where('policy_type', '==', 'Recovery Audit').get();
-      allRAPolicies = snapshot.docs.map(d => d.data());
-      renderPolicies(allRAPolicies);
+      const policy = await PoliciesService.getPolicyByNumber(policyNumber);
+
+      if (policy.policy_type !== 'Recovery Audit') {
+        showErr('This policy number is not associated with a Recovery Audit policy. Please check your policy number or visit the Claims page.');
+        btn.textContent = 'Look Up';
+        btn.disabled    = false;
+        return;
+      }
+
+      populatePolicy(policy);
+      await loadLinkedClaims(policyNumber);
+      resultsEl.classList.remove('hidden');
+
     } catch (err) {
-      document.getElementById('ra-policies-list').innerHTML =
-        '<p class="text-red-500">Error loading policies: ' + err.message + '</p>';
+      showErr('Policy not found. Please double-check your policy number.');
     }
+
+    btn.textContent = 'Look Up';
+    btn.disabled    = false;
   }
 
-  // ── Load claims that match RA policy numbers ──────────────────────────────────
-  async function loadRAClaims() {
+  // ── Populate policy card ───────────────────────────────────────────────────
+  function populatePolicy(p) {
+    document.getElementById('res-policy-number').textContent = p.policy_number;
+    document.getElementById('res-name').textContent          = p.customer_name;
+    document.getElementById('res-email').textContent         = p.customer_email;
+    document.getElementById('res-coverage').textContent      = '$' + p.coverage_amount;
+    document.getElementById('res-start').textContent         = p.start_date || '—';
+    document.getElementById('res-end').textContent           = p.end_date   || '—';
+    document.getElementById('res-created').textContent       = p.created_at ? new Date(p.created_at).toLocaleDateString() : '—';
+
+    const badge = document.getElementById('res-status-badge');
+    badge.textContent  = (p.status || 'unknown').toUpperCase();
+    badge.className    = 'status-badge status-' + (p.status || 'pending');
+  }
+
+  // ── Load linked claims ─────────────────────────────────────────────────────
+  async function loadLinkedClaims(policyNumber) {
+    const container = document.getElementById('res-claims');
     try {
-      const snapshot = await db.collection('claims').get();
+      const snapshot = await db.collection('claims')
+        .where('policy_number', '==', policyNumber).get();
       const claims = snapshot.docs.map(d => d.data());
-      // After policies loaded, filter claims belonging to RA policy numbers
-      const raNums = new Set(allRAPolicies.map(p => p.policy_number));
-      allRAClaims = claims.filter(c => raNums.has(c.policy_number));
-      renderClaims(allRAClaims);
+
+      if (!claims.length) {
+        container.innerHTML = '<p class="text-gray-500 text-sm bg-white rounded-xl p-5 shadow">No claims found linked to this policy.</p>';
+        return;
+      }
+
+      container.innerHTML = claims.map(c => {
+        const statusClass = 'status-' + (c.status || 'pending');
+        const deductibleBlock = c.deductible_reason ? `
+          <div class="mt-3 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg text-sm">
+            <p class="font-semibold text-yellow-800">⚠ Deductible Required</p>
+            <p class="text-yellow-700 mt-1">Amount: <strong>$${(c.deductible_amount || 0).toFixed(2)}</strong></p>
+            <p class="text-yellow-700">Reason: ${c.deductible_reason}</p>
+            ${c.deductible_amount ? `<a href="pay-deductible.html?claim=${c.claim_number}" class="inline-block mt-2 bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-blue-800 transition">Pay Deductible</a>` : ''}
+          </div>` : '';
+
+        return `
+          <div class="bg-white rounded-xl shadow p-5">
+            <div class="flex justify-between items-start flex-wrap gap-3">
+              <div>
+                <p class="font-bold text-blue-900">${c.claim_number}</p>
+                <p class="text-sm text-gray-600 mt-1">Type: ${c.claim_type} &nbsp;|&nbsp; Date: ${c.claim_date || '—'}</p>
+                <p class="text-sm text-gray-500 mt-0.5">Claimed Amount: <strong>$${(c.claimed_amount || 0).toFixed(2)}</strong></p>
+                <p class="text-xs text-gray-400 mt-1">Submitted: ${c.created_at ? new Date(c.created_at).toLocaleDateString() : '—'}</p>
+              </div>
+              <span class="status-badge ${statusClass}">${(c.status || '').toUpperCase()}</span>
+            </div>
+            ${c.description ? `<p class="text-sm text-gray-600 mt-3 italic">"${c.description}"</p>` : ''}
+            ${deductibleBlock}
+          </div>`;
+      }).join('');
     } catch (err) {
-      document.getElementById('ra-claims-list').innerHTML =
-        '<p class="text-red-500">Error loading claims: ' + err.message + '</p>';
+      container.innerHTML = '<p class="text-red-500 text-sm">Failed to load claims.</p>';
     }
   }
 
-  // ── Render Policies ───────────────────────────────────────────────────────────
-  function renderPolicies(policies) {
-    const container = document.getElementById('ra-policies-list');
-    if (!policies.length) {
-      container.innerHTML = '<p class="text-gray-500">No Recovery Audit policies found.</p>';
-      return;
-    }
-    const params = new URLSearchParams(window.location.search);
-    const highlight = params.get('policy');
-    container.innerHTML = policies.map(p => {
-      const isHighlighted = highlight && p.policy_number === highlight;
-      return `
-        <div id="policy-card-${p.policy_number}"
-             class="audit-card bg-white border ${isHighlighted ? 'border-yellow-400 ring-2 ring-yellow-300' : 'border-blue-100'} rounded-xl p-5 shadow-sm">
-          <div class="flex justify-between items-start flex-wrap gap-3">
-            <div>
-              ${isHighlighted ? '<span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded mb-2">⚡ Highlighted from Claim Form</span><br>' : ''}
-              <p class="font-bold text-blue-900 text-lg">${p.policy_number}</p>
-              <p class="text-gray-700 mt-1"><span class="font-semibold">Customer:</span> ${p.customer_name}</p>
-              <p class="text-gray-600 text-sm">${p.customer_email}</p>
-              <p class="text-gray-500 text-sm mt-1">Coverage: $${p.coverage_amount} &nbsp;|&nbsp; Status:
-                <span class="font-semibold ${p.status === 'active' ? 'text-green-700' : 'text-red-700'}">${p.status?.toUpperCase()}</span>
-              </p>
-              <p class="text-gray-400 text-xs mt-1">Start: ${p.start_date} → End: ${p.end_date}</p>
-            </div>
-            <div class="flex flex-col items-end gap-2">
-              <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">Recovery Audit</span>
-              <p class="text-xs text-gray-400">Created: ${p.created_at ? new Date(p.created_at).toLocaleDateString() : '—'}</p>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function showErr(msg) {
+    const el = document.getElementById('ra-error');
+    el.textContent = msg;
+    el.classList.remove('hidden');
   }
 
-  // ── Render Claims ─────────────────────────────────────────────────────────────
-  function renderClaims(claims) {
-    const container = document.getElementById('ra-claims-list');
-    if (!claims.length) {
-      container.innerHTML = '<p class="text-gray-500">No claims linked to Recovery Audit policies.</p>';
-      return;
-    }
-    const statusColor = { pending:'text-yellow-700 bg-yellow-50', approved:'text-green-700 bg-green-50', rejected:'text-red-700 bg-red-50', paid:'text-blue-700 bg-blue-50' };
-    container.innerHTML = claims.map(c => `
-      <div class="audit-card bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-        <div class="flex justify-between items-start flex-wrap gap-3">
-          <div>
-            <p class="font-bold text-blue-900">${c.claim_number}</p>
-            <p class="text-gray-700 text-sm mt-1">${c.customer_name} — <span class="text-gray-500">${c.customer_email}</span></p>
-            <p class="text-gray-500 text-sm">Policy: <span class="font-semibold text-blue-800">${c.policy_number}</span></p>
-            <p class="text-gray-500 text-sm">Type: ${c.claim_type} &nbsp;|&nbsp; Amount: <span class="font-semibold">$${(c.claimed_amount||0).toFixed(2)}</span></p>
-            <p class="text-gray-400 text-xs mt-1">Submitted: ${c.created_at ? new Date(c.created_at).toLocaleDateString() : '—'}</p>
-          </div>
-          <div>
-            <span class="text-xs font-bold px-3 py-1 rounded-full ${statusColor[c.status] || 'text-gray-700 bg-gray-100'}">${(c.status||'').toUpperCase()}</span>
-          </div>
-        </div>
-        ${c.deductible_reason ? `
-          <div class="mt-3 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded text-sm">
-            <span class="font-semibold text-yellow-800">Deductible:</span> $${(c.deductible_amount||0).toFixed(2)} — ${c.deductible_reason}
-          </div>` : ''}
-      </div>`).join('');
+  function resetLookup() {
+    document.getElementById('ra-policy-input').value = '';
+    document.getElementById('ra-results').classList.add('hidden');
+    document.getElementById('ra-error').classList.add('hidden');
+    document.getElementById('ra-policy-input').focus();
+    // Clear URL param
+    history.replaceState(null, '', 'recovery-audit.html');
   }
-
-  // ── Stats ─────────────────────────────────────────────────────────────────────
-  function updateStats() {
-    document.getElementById('stat-ra-policies').textContent = allRAPolicies.length;
-    document.getElementById('stat-ra-active').textContent   = allRAPolicies.filter(p => p.status === 'active').length;
-    document.getElementById('stat-ra-claims').textContent   = allRAClaims.length;
-  }
-
-  // ── Search ────────────────────────────────────────────────────────────────────
-  function filterCards() {
-    const q = document.getElementById('ra-search').value.trim().toLowerCase();
-    if (!q) { renderPolicies(allRAPolicies); renderClaims(allRAClaims); return; }
-    renderPolicies(allRAPolicies.filter(p =>
-      (p.policy_number||'').toLowerCase().includes(q) ||
-      (p.customer_name||'').toLowerCase().includes(q) ||
-      (p.customer_email||'').toLowerCase().includes(q)
-    ));
-    renderClaims(allRAClaims.filter(c =>
-      (c.policy_number||'').toLowerCase().includes(q) ||
-      (c.customer_name||'').toLowerCase().includes(q) ||
-      (c.claim_number||'').toLowerCase().includes(q)
-    ));
-  }
-
-  function clearSearch() {
-    document.getElementById('ra-search').value = '';
-    renderPolicies(allRAPolicies);
-    renderClaims(allRAClaims);
-  }
-
-  document.getElementById('ra-search')?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') filterCards();
-  });
 </script>
 </body>
 </html>
