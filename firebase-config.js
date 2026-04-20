@@ -1,11 +1,12 @@
 // Replace these with your actual Firebase project configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCHunYLxizbXQhwvn54Uq6xP1eXNKconeY",
+  authDomain: "insurifyorg-387fb.firebaseapp.com",
+  projectId: "insurifyorg-387fb",
+  storageBucket: "insurifyorg-387fb.firebasestorage.app",
+  messagingSenderId: "940506824987",
+  appId: "1:940506824987:web:4b4d909bed38fbafd7d3be",
+  measurementId: "G-10S0N0PSNT"
 };
 
 // Initialize Firebase
