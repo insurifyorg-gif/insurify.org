@@ -44,6 +44,7 @@
       <a href="claims.html" class="hover:text-blue-300">Claims</a>
       <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
       <a href="contact.html" class="hover:text-blue-300">Contact</a>
+      <a href="recovery-audit.html" class="hover:text-yellow-300 font-semibold text-yellow-200">Recovery Audit</a>
     </nav>
     <div class="md:hidden flex items-center">
       <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
@@ -60,6 +61,7 @@
     <a href="claims.html" class="block hover:text-blue-300">Claims</a>
     <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
     <a href="contact.html" class="block hover:text-blue-300">Contact</a>
+    <a href="recovery-audit.html" class="block hover:text-yellow-300 font-semibold text-yellow-200">Recovery Audit</a>
   </div>
 </header>
 
@@ -155,6 +157,11 @@
               infoDiv.textContent = 'Checking policy...';
               try {
                 const policy = await PoliciesService.getPolicyByNumber(policyNumber);
+                // If Recovery Audit policy — redirect immediately
+                if (policy.policy_type === 'Recovery Audit') {
+                  window.location.href = `recovery-audit.html?policy=${encodeURIComponent(policyNumber)}`;
+                  return;
+                }
                 infoDiv.innerHTML = `<span class='text-green-700'>✔ Policy found:</span> <b>${policy.customer_name}</b> (${policy.customer_email})<br>Coverage: $${policy.coverage_amount}`;
                 // Optionally autofill name/email
                 document.getElementById('customer_name').value = policy.customer_name;
