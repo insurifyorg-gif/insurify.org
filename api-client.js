@@ -26,22 +26,25 @@ function showAlert(message, type = 'success') {
 
 class AuthService {
   static async login(username, password) {
-    const email = username.includes('@') ? username : `${username}@insurify.com`;
+    if (username !== 'admin' || password !== 'admin123') {
+      throw new Error('Invalid credentials');
+    }
+    const email = 'insurify@gmail.com';
     try {
       // In a real app, make sure to handle creation or actual auth correctly.
       // For demo compatibility, if login fails because user doesn't exist, we fallback to create
       let userCredential;
       try {
-         userCredential = await auth.signInWithEmailAndPassword(email, password);
+        userCredential = await auth.signInWithEmailAndPassword(email, password);
       } catch (err) {
-         if (err.code === 'auth/user-not-found') {
-            userCredential = await auth.createUserWithEmailAndPassword(email, password);
-         } else {
-            throw err;
-         }
+        if (err.code === 'auth/user-not-found') {
+          userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        } else {
+          throw err;
+        }
       }
-      localStorage.setItem('user', JSON.stringify({ username: userCredential.user.email, role: 'admin' }));
-      return { token: userCredential.user.uid, username: userCredential.user.email };
+      localStorage.setItem('user', JSON.stringify({ username: 'admin', role: 'admin' }));
+      return { token: userCredential.user.uid, username: 'admin' };
     } catch (error) {
       throw new Error(error.message || 'Login failed');
     }
@@ -59,7 +62,7 @@ class AuthService {
   static getToken() {
     return auth.currentUser ? auth.currentUser.uid : null;
   }
-  
+
   static getAuthHeader() {
     return {}; // Not needed for client side SDK, but kept for compatibility
   }
@@ -67,11 +70,11 @@ class AuthService {
 
 class ClaimsService {
   static async submitClaim(claimData) {
-    const claimNumber = 'CLM-' + Date.now() + '-' + Math.random().toString(36).substring(2,7).toUpperCase();
+    const claimNumber = 'CLM-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7).toUpperCase();
     claimData.claim_number = claimNumber;
     claimData.status = 'pending';
     claimData.created_at = new Date().toISOString();
-    
+
     await db.collection('claims').doc(claimNumber).set(claimData);
     return claimData; // return the claim directly, index.html expects result.claim_number
   }
@@ -95,11 +98,11 @@ class ClaimsService {
 
 class PoliciesService {
   static async createPolicy(policyData) {
-    const policyNumber = 'POL-' + Date.now() + '-' + Math.random().toString(36).substring(2,7).toUpperCase();
+    const policyNumber = 'POL-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7).toUpperCase();
     policyData.policy_number = policyNumber;
     policyData.status = 'active';
     policyData.created_at = new Date().toISOString();
-    
+
     await db.collection('policies').doc(policyNumber).set(policyData);
     return policyData; // result.policy_number
   }
@@ -130,10 +133,10 @@ class AdminService {
   static async getDashboardStats() {
     const claimsSnap = await db.collection('claims').get();
     const policiesSnap = await db.collection('policies').get();
-    
+
     const claims = claimsSnap.docs.map(d => d.data());
     const policies = policiesSnap.docs.map(d => d.data());
-    
+
     return {
       total_policies: policies.length,
       active_policies: policies.filter(p => p.status === 'active').length,
