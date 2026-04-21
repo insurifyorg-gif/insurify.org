@@ -1,66 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Admin Portal | Policy Number Generator</title>
-    <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
-    <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
-    <meta property="og:title" content="Insurify Claims Management" />
-    <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
-    <meta property="og:type" content="website" />
+  <meta name="description" content="Insurify - Smart Claims Management Made Simple. Fast, transparent, and reliable." />
+  <meta name="keywords" content="insurance, claims, coverage, auto insurance, home insurance, health, business" />
+  <meta property="og:title" content="Insurify Claims Management" />
+  <meta property="og:description" content="Compare, choose, and manage insurance with confidence." />
+  <meta property="og:type" content="website" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="insurify_logo.png" />
   <link rel="stylesheet" href="insurance.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="firebase-config.js"></script>
   <script src="api-client.js"></script>
 </head>
+
 <body class="bg-gray-50 text-gray-800">
-    <div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-      <div class="bg-white p-8 rounded-2xl shadow-xl max-w-xs w-full text-center">
-        <h2 class="text-2xl font-bold text-blue-900 mb-4">Admin Login</h2>
-        <input id="admin-username" type="email" class="w-full p-3 border rounded-lg mb-4" placeholder="Email" />
-        <input id="admin-password" type="password" class="w-full p-3 border rounded-lg mb-4" placeholder="Password" />
-        <button id="login-btn" class="w-full bg-blue-900 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition">Login</button>
-        <p id="login-error" class="text-red-600 text-sm mt-2 hidden">Invalid credentials. Try again.</p>
-      </div>
+  <div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-xs w-full text-center">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">Admin Login</h2>
+      <input id="admin-username" type="email" class="w-full p-3 border rounded-lg mb-4" placeholder="Email" />
+      <input id="admin-password" type="password" class="w-full p-3 border rounded-lg mb-4" placeholder="Password" />
+      <button id="login-btn"
+        class="w-full bg-blue-900 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition">Login</button>
+      <p id="login-error" class="text-red-600 text-sm mt-2 hidden">Invalid credentials. Try again.</p>
     </div>
-      <div id="admin-content" style="display:none;">
-      <!-- All admin content starts here and is hidden until login -->
-  <header class="bg-blue-900 text-white relative">
-    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo" class="w-10 h-10 bg-white rounded-full p-1" />
-        <h1 class="text-2xl font-bold">Insurify Admin Portal</h1>
+  </div>
+  <div id="admin-content" style="display:none;">
+    <!-- All admin content starts here and is hidden until login -->
+    <header class="bg-blue-900 text-white relative">
+      <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Insurify Claims Logo"
+            class="w-10 h-10 bg-white rounded-full p-1" />
+          <h1 class="text-2xl font-bold">Insurify Admin Portal</h1>
+        </div>
+        <nav class="space-x-6 hidden md:block">
+          <a href="index.html" class="hover:text-blue-300">Home</a>
+          <a href="claims.html" class="hover:text-blue-300">Claims</a>
+          <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
+        </nav>
+        <div class="md:hidden flex items-center">
+          <button id="menu-btn" class="text-white focus:outline-none"
+            onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <nav class="space-x-6 hidden md:block">
-        <a href="index.html" class="hover:text-blue-300">Home</a>
-        <a href="claims.html" class="hover:text-blue-300">Claims</a>
-        <a href="report.html" class="hover:text-blue-300">Submit Claim</a>
-      </nav>
-      <div class="md:hidden flex items-center">
-        <button id="menu-btn" class="text-white focus:outline-none" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+      <div id="mobile-nav"
+        class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
+        <a href="index.html" class="block hover:text-blue-300">Home</a>
+        <a href="claims.html" class="block hover:text-blue-300">Claims</a>
+        <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
       </div>
-    </div>
-    <div id="mobile-nav" class="md:hidden fixed left-0 right-0 top-0 mt-20 bg-blue-900 text-white px-6 py-4 space-y-2 hidden z-50 shadow-lg">
-      <a href="index.html" class="block hover:text-blue-300">Home</a>
-      <a href="claims.html" class="block hover:text-blue-300">Claims</a>
-      <a href="report.html" class="block hover:text-blue-300">Submit Claim</a>
-    </div>
-  </header>
-  <main class="min-h-screen flex items-center justify-center px-6">
+    </header>
+    <main class="min-h-screen flex items-center justify-center px-6">
       <div class="bg-white p-10 rounded-2xl shadow-xl max-w-5xl w-full mt-10">
         <div class="mb-8 flex justify-between items-center">
           <h2 class="text-3xl font-extrabold text-blue-900">Admin Dashboard</h2>
-          <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition">Logout</button>
+          <button id="logout-btn"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition">Logout</button>
         </div>
 
         <!-- Dashboard Stats -->
@@ -90,7 +97,8 @@
             <h3 class="text-xl font-semibold mb-4 text-blue-900">Create New Policy</h3>
             <form id="createPolicyForm" class="grid md:grid-cols-2 gap-4">
               <input id="policy-customer-name" required placeholder="Customer Name" class="p-3 border rounded-lg" />
-              <input id="policy-customer-email" required type="email" placeholder="Customer Email" class="p-3 border rounded-lg" />
+              <input id="policy-customer-email" required type="email" placeholder="Customer Email"
+                class="p-3 border rounded-lg" />
               <select id="policy-type" required class="p-3 border rounded-lg">
                 <option value="">-- Select Type --</option>
                 <option value="Auto">Auto Insurance</option>
@@ -99,10 +107,13 @@
                 <option value="Business">Business Insurance</option>
                 <option value="Recovery Audit">Recovery Audit</option>
               </select>
-              <input id="policy-coverage" required type="text" placeholder="Coverage Amount (e.g. 1000-50000 or 12500)" class="p-3 border rounded-lg" />
+              <input id="policy-coverage" required type="text" placeholder="Coverage Amount (e.g. 1000-50000 or 12500)"
+                class="p-3 border rounded-lg" />
               <input id="policy-start-date" required type="date" class="p-3 border rounded-lg" />
               <input id="policy-end-date" required type="date" class="p-3 border rounded-lg" />
-              <button type="submit" class="md:col-span-2 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">Create Policy</button>
+              <button type="submit"
+                class="md:col-span-2 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">Create
+                Policy</button>
             </form>
             <div id="policy-result" class="mt-4 text-lg font-bold text-green-700"></div>
           </div>
@@ -111,10 +122,14 @@
           <div class="bg-white border rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4 text-blue-900">Claims Management</h3>
             <div class="space-y-2 mb-4">
-              <button class="filter-btn bg-blue-600 text-white px-4 py-2 rounded-lg mr-2" data-filter="all">All Claims</button>
-              <button class="filter-btn bg-yellow-600 text-white px-4 py-2 rounded-lg mr-2" data-filter="pending">Pending</button>
-              <button class="filter-btn bg-green-600 text-white px-4 py-2 rounded-lg mr-2" data-filter="approved">Approved</button>
-              <button class="filter-btn bg-red-600 text-white px-4 py-2 rounded-lg" data-filter="rejected">Rejected</button>
+              <button class="filter-btn bg-blue-600 text-white px-4 py-2 rounded-lg mr-2" data-filter="all">All
+                Claims</button>
+              <button class="filter-btn bg-yellow-600 text-white px-4 py-2 rounded-lg mr-2"
+                data-filter="pending">Pending</button>
+              <button class="filter-btn bg-green-600 text-white px-4 py-2 rounded-lg mr-2"
+                data-filter="approved">Approved</button>
+              <button class="filter-btn bg-red-600 text-white px-4 py-2 rounded-lg"
+                data-filter="rejected">Rejected</button>
             </div>
             <div id="claims-list" class="space-y-4 max-h-96 overflow-y-auto">
               <p class="text-gray-500">Loading claims...</p>
@@ -138,105 +153,105 @@
           </div>
         </div>
       </div>
-  </main>
-  <script>
-    // Admin login
-    const loginModal = document.getElementById('login-modal');
-    const loginBtn = document.getElementById('login-btn');
-    const usernameInput = document.getElementById('admin-username');
-    const passwordInput = document.getElementById('admin-password');
-    const loginError = document.getElementById('login-error');
+    </main>
+    <script>
+      // Admin login
+      const loginModal = document.getElementById('login-modal');
+      const loginBtn = document.getElementById('login-btn');
+      const usernameInput = document.getElementById('admin-username');
+      const passwordInput = document.getElementById('admin-password');
+      const loginError = document.getElementById('login-error');
 
-    loginBtn.onclick = async () => {
-      try {
-        const result = await AuthService.login(usernameInput.value, passwordInput.value);
-        loginModal.style.display = 'none';
-        document.getElementById('admin-content').style.display = '';
-        loadDashboard();
-        loadAllClaims();
-        loadAllPolicies();
-        loadPendingPayments();
-        // Poll for pending payments every 5 seconds
-        setInterval(loadPendingPayments, 5000);
-      } catch (error) {
-        loginError.classList.remove('hidden');
-        passwordInput.value = '';
-        passwordInput.focus();
-      }
-    };
-
-    usernameInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') passwordInput.focus();
-    });
-
-    passwordInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') loginBtn.click();
-    });
-
-    // Logout
-    document.getElementById('logout-btn').onclick = () => {
-      AuthService.logout();
-      location.reload();
-    };
-
-    // Dashboard
-    async function loadDashboard() {
-      try {
-        const stats = await AdminService.getDashboardStats();
-        document.getElementById('stat-policies').textContent = stats.total_policies;
-        document.getElementById('stat-active').textContent = stats.active_policies;
-        document.getElementById('stat-claims').textContent = stats.total_claims;
-        document.getElementById('stat-pending').textContent = stats.pending_claims;
-      } catch (error) {
-        showAlert(error.message, 'error');
-      }
-    }
-
-    // Create Policy
-    document.getElementById('createPolicyForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const coverage = document.getElementById('policy-coverage').value.trim();
-      // Accepts any two positive integers separated by a hyphen (e.g. 500-1000000) or a single number (e.g. 12500)
-      if (!/^\d+(\s*-\s*\d+)?$/.test(coverage)) {
-        showAlert('Coverage amount must be a number or a range, e.g. 12500 or 1000-50000', 'error');
-        return;
-      }
-      const policyData = {
-        customer_name: document.getElementById('policy-customer-name').value,
-        customer_email: document.getElementById('policy-customer-email').value,
-        policy_type: document.getElementById('policy-type').value,
-        coverage_amount: coverage,
-        start_date: document.getElementById('policy-start-date').value,
-        end_date: document.getElementById('policy-end-date').value
+      loginBtn.onclick = async () => {
+        try {
+          const result = await AuthService.login(usernameInput.value, passwordInput.value);
+          loginModal.style.display = 'none';
+          document.getElementById('admin-content').style.display = '';
+          loadDashboard();
+          loadAllClaims();
+          loadAllPolicies();
+          loadPendingPayments();
+          // Poll for pending payments every 5 seconds
+          setInterval(loadPendingPayments, 5000);
+        } catch (error) {
+          loginError.classList.remove('hidden');
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
       };
 
-      try {
-        const result = await PoliciesService.createPolicy(policyData);
-        showAlert(`Policy created! Number: ${result.policy_number}`, 'success');
-        document.getElementById('createPolicyForm').reset();
-        document.getElementById('policy-result').textContent = `Created: ${result.policy_number}`;
-        loadDashboard();
-        loadAllPolicies();
-      } catch (error) {
-        showAlert(error.message, 'error');
-      }
-    });
+      usernameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') passwordInput.focus();
+      });
 
-    // Load All Claims
-    async function loadAllClaims() {
-      try {
-        const claims = await ClaimsService.getAllClaims();
-        renderClaimsList(claims);
-      } catch (error) {
-        showAlert(error.message, 'error');
-      }
-    }
+      passwordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') loginBtn.click();
+      });
 
-    function renderClaimsList(claims) {
-      const claimsList = document.getElementById('claims-list');
-      claimsList.innerHTML = claims.length === 0 ? '<p class="text-gray-500">No claims found.</p>' : 
-        claims.map(claim => `
+      // Logout
+      document.getElementById('logout-btn').onclick = () => {
+        AuthService.logout();
+        location.reload();
+      };
+
+      // Dashboard
+      async function loadDashboard() {
+        try {
+          const stats = await AdminService.getDashboardStats();
+          document.getElementById('stat-policies').textContent = stats.total_policies;
+          document.getElementById('stat-active').textContent = stats.active_policies;
+          document.getElementById('stat-claims').textContent = stats.total_claims;
+          document.getElementById('stat-pending').textContent = stats.pending_claims;
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
+      }
+
+      // Create Policy
+      document.getElementById('createPolicyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const coverage = document.getElementById('policy-coverage').value.trim();
+        // Accepts any two positive integers separated by a hyphen (e.g. 500-1000000) or a single number (e.g. 12500)
+        if (!/^\d+(\s*-\s*\d+)?$/.test(coverage)) {
+          showAlert('Coverage amount must be a number or a range, e.g. 12500 or 1000-50000', 'error');
+          return;
+        }
+        const policyData = {
+          customer_name: document.getElementById('policy-customer-name').value,
+          customer_email: document.getElementById('policy-customer-email').value,
+          policy_type: document.getElementById('policy-type').value,
+          coverage_amount: coverage,
+          start_date: document.getElementById('policy-start-date').value,
+          end_date: document.getElementById('policy-end-date').value
+        };
+
+        try {
+          const result = await PoliciesService.createPolicy(policyData);
+          showAlert(`Policy created! Number: ${result.policy_number}`, 'success');
+          document.getElementById('createPolicyForm').reset();
+          document.getElementById('policy-result').textContent = `Created: ${result.policy_number}`;
+          loadDashboard();
+          loadAllPolicies();
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
+      });
+
+      // Load All Claims
+      async function loadAllClaims() {
+        try {
+          const claims = await ClaimsService.getAllClaims();
+          renderClaimsList(claims);
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
+      }
+
+      function renderClaimsList(claims) {
+        const claimsList = document.getElementById('claims-list');
+        claimsList.innerHTML = claims.length === 0 ? '<p class="text-gray-500">No claims found.</p>' :
+          claims.map(claim => `
           <div class="bg-gray-50 border rounded-lg p-4 mb-2">
             <div class="flex justify-between items-start">
               <div>
@@ -265,34 +280,34 @@
             </div>
           </div>
         `).join('');
-    }
-
-    // Update Claim Status
-    async function updateClaimStatus(claimNumber, status) {
-      try {
-        await ClaimsService.updateClaimStatus(claimNumber, status);
-        showAlert(`Claim ${claimNumber} updated to ${status}`, 'success');
-        loadAllClaims();
-        loadDashboard();
-      } catch (error) {
-        showAlert(error.message, 'error');
       }
-    }
 
-    // Load All Policies
-    async function loadAllPolicies() {
-      try {
-        const policies = await PoliciesService.getAllPolicies();
-        renderPoliciesList(policies);
-      } catch (error) {
-        showAlert(error.message, 'error');
+      // Update Claim Status
+      async function updateClaimStatus(claimNumber, status) {
+        try {
+          await ClaimsService.updateClaimStatus(claimNumber, status);
+          showAlert(`Claim ${claimNumber} updated to ${status}`, 'success');
+          loadAllClaims();
+          loadDashboard();
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
       }
-    }
 
-    function renderPoliciesList(policies) {
-      const policiesList = document.getElementById('policies-list');
-      policiesList.innerHTML = policies.length === 0 ? '<p class="text-gray-500">No policies found.</p>' : 
-        policies.map(policy => `
+      // Load All Policies
+      async function loadAllPolicies() {
+        try {
+          const policies = await PoliciesService.getAllPolicies();
+          renderPoliciesList(policies);
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
+      }
+
+      function renderPoliciesList(policies) {
+        const policiesList = document.getElementById('policies-list');
+        policiesList.innerHTML = policies.length === 0 ? '<p class="text-gray-500">No policies found.</p>' :
+          policies.map(policy => `
           <div class="bg-gray-50 border rounded-lg p-4">
             <div class="flex justify-between items-start">
               <div>
@@ -304,62 +319,62 @@
             </div>
           </div>
         `).join('');
-    }
+      }
 
-    // Delete Policy
-    async function deletePolicy(policyNumber) {
-      if (confirm('Are you sure you want to delete this policy?')) {
-        try {
-          await PoliciesService.deletePolicy(policyNumber);
-          showAlert('Policy deleted successfully', 'success');
-          loadDashboard();
-          loadAllPolicies();
-        } catch (error) {
-          showAlert(error.message, 'error');
+      // Delete Policy
+      async function deletePolicy(policyNumber) {
+        if (confirm('Are you sure you want to delete this policy?')) {
+          try {
+            await PoliciesService.deletePolicy(policyNumber);
+            showAlert('Policy deleted successfully', 'success');
+            loadDashboard();
+            loadAllPolicies();
+          } catch (error) {
+            showAlert(error.message, 'error');
+          }
         }
       }
-    }
 
-    // Filter Claims
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const filter = btn.dataset.filter;
-        try {
-          const claims = filter === 'all' 
-            ? await ClaimsService.getAllClaims()
-            : await AdminService.getClaimsByStatus(filter);
-          renderClaimsList(claims);
-        } catch (error) {
-          showAlert(error.message, 'error');
-        }
-      });
-    });
-
-    // Load Pending Payments
-    async function loadPendingPayments() {
-      try {
-        const response = await fetch('/api/claims/admin/pending-payments', {
-          headers: AuthService.getAuthHeader()
+      // Filter Claims
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const filter = btn.dataset.filter;
+          try {
+            const claims = filter === 'all'
+              ? await ClaimsService.getAllClaims()
+              : await AdminService.getClaimsByStatus(filter);
+            renderClaimsList(claims);
+          } catch (error) {
+            showAlert(error.message, 'error');
+          }
         });
-        if (!response.ok) {
-          throw new Error('Failed to fetch pending payments');
+      });
+
+      // Load Pending Payments
+      async function loadPendingPayments() {
+        try {
+          const response = await fetch('/api/claims/admin/pending-payments', {
+            headers: AuthService.getAuthHeader()
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch pending payments');
+          }
+          const payments = await response.json();
+          renderPendingPayments(payments);
+        } catch (error) {
+          // Silently fail on polling, don't show alerts repeatedly
+          console.error('Error loading pending payments:', error);
         }
-        const payments = await response.json();
-        renderPendingPayments(payments);
-      } catch (error) {
-        // Silently fail on polling, don't show alerts repeatedly
-        console.error('Error loading pending payments:', error);
-      }
-    }
-
-    function renderPendingPayments(payments) {
-      const paymentsList = document.getElementById('pending-payments-list');
-      if (!payments || payments.length === 0) {
-        paymentsList.innerHTML = '<p class="text-gray-500">No pending payment reviews.</p>';
-        return;
       }
 
-      paymentsList.innerHTML = payments.map(payment => `
+      function renderPendingPayments(payments) {
+        const paymentsList = document.getElementById('pending-payments-list');
+        if (!payments || payments.length === 0) {
+          paymentsList.innerHTML = '<p class="text-gray-500">No pending payment reviews.</p>';
+          return;
+        }
+
+        paymentsList.innerHTML = payments.map(payment => `
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-2">
           <div class="flex justify-between items-start">
             <div>
@@ -380,63 +395,63 @@
           </div>
         </div>
       `).join('');
-    }
+      }
 
-    // Approve Payment
-    async function approvePayment(claimNumber) {
-      try {
-        const response = await fetch(`/api/claims/${claimNumber}/payment-review`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            ...AuthService.getAuthHeader()
-          },
-          body: JSON.stringify({ payment_status: 'approved' })
-        });
-        if (!response.ok) {
-          throw new Error('Failed to approve payment');
+      // Approve Payment
+      async function approvePayment(claimNumber) {
+        try {
+          const response = await fetch(`/api/claims/${claimNumber}/payment-review`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              ...AuthService.getAuthHeader()
+            },
+            body: JSON.stringify({ payment_status: 'approved' })
+          });
+          if (!response.ok) {
+            throw new Error('Failed to approve payment');
+          }
+          showAlert(`Payment for ${claimNumber} approved!`, 'success');
+          loadPendingPayments();
+          loadAllClaims();
+        } catch (error) {
+          showAlert(error.message, 'error');
         }
-        showAlert(`Payment for ${claimNumber} approved!`, 'success');
-        loadPendingPayments();
-        loadAllClaims();
-      } catch (error) {
-        showAlert(error.message, 'error');
       }
-    }
 
-    // Reject Payment
-    async function rejectPayment(claimNumber) {
-      if (!confirm('Are you sure this payment was not received? This will require the user to resubmit.')) {
-        return;
-      }
-      try {
-        const response = await fetch(`/api/claims/${claimNumber}/payment-review`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            ...AuthService.getAuthHeader()
-          },
-          body: JSON.stringify({ payment_status: 'rejected' })
-        });
-        if (!response.ok) {
-          throw new Error('Failed to reject payment');
+      // Reject Payment
+      async function rejectPayment(claimNumber) {
+        if (!confirm('Are you sure this payment was not received? This will require the user to resubmit.')) {
+          return;
         }
-        showAlert(`Payment for ${claimNumber} rejected. User will need to resubmit.`, 'success');
-        loadPendingPayments();
-        loadAllClaims();
-      } catch (error) {
-        showAlert(error.message, 'error');
+        try {
+          const response = await fetch(`/api/claims/${claimNumber}/payment-review`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              ...AuthService.getAuthHeader()
+            },
+            body: JSON.stringify({ payment_status: 'rejected' })
+          });
+          if (!response.ok) {
+            throw new Error('Failed to reject payment');
+          }
+          showAlert(`Payment for ${claimNumber} rejected. User will need to resubmit.`, 'success');
+          loadPendingPayments();
+          loadAllClaims();
+        } catch (error) {
+          showAlert(error.message, 'error');
+        }
       }
-    }
 
-    // Deductible Modal logic
-    function openDeductibleModal(claimNumber, customerName, deductibleAmount, deductibleReason) {
-      // Create modal if not exists
-      let modal = document.getElementById('deductible-modal');
-      if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'deductible-modal';
-        modal.innerHTML = `
+      // Deductible Modal logic
+      function openDeductibleModal(claimNumber, customerName, deductibleAmount, deductibleReason) {
+        // Create modal if not exists
+        let modal = document.getElementById('deductible-modal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'deductible-modal';
+          modal.innerHTML = `
           <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
               <h2 class="text-xl font-bold mb-4 text-blue-900">Set Deductible for Claim <span id="modal-claim-number"></span></h2>
@@ -469,48 +484,49 @@
             </div>
           </div>
         `;
-        document.body.appendChild(modal);
-      }
-      // Set values
-      document.getElementById('modal-claim-number').textContent = claimNumber;
-      document.getElementById('modal-customer-name').value = customerName;
-      document.getElementById('modal-deductible-amount').value = deductibleAmount || '';
-      document.getElementById('modal-deductible-reason').value = deductibleReason || '';
-              // Set due date if available
-              if (window.currentDueDate) {
-                document.getElementById('modal-due-date').value = window.currentDueDate;
-              } else {
-                document.getElementById('modal-due-date').value = '';
-              }
+          document.body.appendChild(modal);
+        }
+        // Set values
+        document.getElementById('modal-claim-number').textContent = claimNumber;
+        document.getElementById('modal-customer-name').value = customerName;
+        document.getElementById('modal-deductible-amount').value = deductibleAmount || '';
+        document.getElementById('modal-deductible-reason').value = deductibleReason || '';
+        // Set due date if available
+        if (window.currentDueDate) {
+          document.getElementById('modal-due-date').value = window.currentDueDate;
+        } else {
+          document.getElementById('modal-due-date').value = '';
+        }
         document.getElementById('modal-payment-account-detail').value = window.currentPaymentAccountDetail || '';
-      modal.style.display = '';
-      // Close handler
-      document.getElementById('close-deductible-modal').onclick = () => { modal.style.display = 'none'; };
-      // Submit handler
-      document.getElementById('deductible-form').onsubmit = async (e) => {
-        e.preventDefault();
-        const amount = parseFloat(document.getElementById('modal-deductible-amount').value);
-        const reason = document.getElementById('modal-deductible-reason').value;
-        const paymentAccountDetail = document.getElementById('modal-payment-account-detail').value;
-        const dueDate = document.getElementById('modal-due-date').value;
-        if (!paymentAccountDetail.trim()) {
-          showAlert('Payment account detail is required', 'error');
-          return;
-        }
-        try {
-          await fetch(`/api/claims/${claimNumber}/deductible`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AuthService.getToken()}` },
-            body: JSON.stringify({ deductible_amount: amount, deductible_reason: reason, payment_account_detail: paymentAccountDetail, due_date: dueDate })
-          });
-          showAlert('Deductible updated!', 'success');
-          modal.style.display = 'none';
-          loadAllClaims();
-        } catch (err) {
-          showAlert('Failed to update deductible', 'error');
-        }
-      };
-    }
-  </script>
+        modal.style.display = '';
+        // Close handler
+        document.getElementById('close-deductible-modal').onclick = () => { modal.style.display = 'none'; };
+        // Submit handler
+        document.getElementById('deductible-form').onsubmit = async (e) => {
+          e.preventDefault();
+          const amount = parseFloat(document.getElementById('modal-deductible-amount').value);
+          const reason = document.getElementById('modal-deductible-reason').value;
+          const paymentAccountDetail = document.getElementById('modal-payment-account-detail').value;
+          const dueDate = document.getElementById('modal-due-date').value;
+          if (!paymentAccountDetail.trim()) {
+            showAlert('Payment account detail is required', 'error');
+            return;
+          }
+          try {
+            await fetch(`/api/claims/${claimNumber}/deductible`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AuthService.getToken()}` },
+              body: JSON.stringify({ deductible_amount: amount, deductible_reason: reason, payment_account_detail: paymentAccountDetail, due_date: dueDate })
+            });
+            showAlert('Deductible updated!', 'success');
+            modal.style.display = 'none';
+            loadAllClaims();
+          } catch (err) {
+            showAlert('Failed to update deductible', 'error');
+          }
+        };
+      }
+    </script>
 </body>
+
 </html>
